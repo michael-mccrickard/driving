@@ -115,10 +115,34 @@ func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
 	var camera := get_viewport().get_camera_2d()
 	var camera_x := camera.global_position.x if camera != null else 0.0
 	var ground := size.y * scenery_ground
+	var speed_multiplier := _level_parallax_speed_multiplier()
 
-	_paint_scenery_band(canvas, size, camera_x, ground, distant_parallax, size.y * 0.38, distant_colour, 0)
-	_paint_scenery_band(canvas, size, camera_x, ground, middle_parallax, size.y * 0.28, middle_colour, 1)
-	_paint_scenery_band(canvas, size, camera_x, ground, near_parallax, size.y * 0.20, near_colour, 2)
+	_paint_scenery_band(canvas, size, camera_x, ground, distant_parallax * speed_multiplier, size.y * 0.38, distant_colour, 0)
+	_paint_scenery_band(canvas, size, camera_x, ground, middle_parallax * speed_multiplier, size.y * 0.28, middle_colour, 1)
+	_paint_scenery_band(canvas, size, camera_x, ground, near_parallax * speed_multiplier, size.y * 0.20, near_colour, 2)
+
+
+## LevelConfig lives outside the level scene, so at runtime the backdrop finds
+## the active config through Main. This keeps the per-level speed setting in the
+## .tres resource rather than duplicating it on every level scene.
+func _level_parallax_speed_multiplier() -> float:
+	if Engine.is_editor_hint():
+		return 1.0
+	var main := get_tree().current_scene
+	if main == null:
+		return 1.0
+	var index_value: Variant = main.get("_level_index")
+	var levels_value: Variant = main.get("levels")
+	if not index_value is int or not levels_value is Array:
+		return 1.0
+	var levels: Array = levels_value
+	var index := int(index_value)
+	if index < 0 or index >= levels.size():
+		return 1.0
+	var config_value: Variant = levels[index]
+	if config_value is LevelConfig:
+		return maxf(0.0, config_value.parallax_speed_multiplier)
+	return 1.0
 
 
 func _paint_scenery_band(
