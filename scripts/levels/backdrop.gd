@@ -50,9 +50,9 @@ extends CanvasLayer
 @export_range(0.0, 1.0, 0.01) var distant_parallax := 0.10
 @export_range(0.0, 1.0, 0.01) var middle_parallax := 0.25
 @export_range(0.0, 1.0, 0.01) var near_parallax := 0.50
-## The scenery now starts considerably higher on screen. This leaves enough of
-## each silhouette visible above the terrain on ordinary sections of track.
-@export_range(0.25, 0.80, 0.01) var scenery_horizon := 0.46
+## The baseline sits below the normal terrain horizon so that the upper
+## portions of all three silhouettes remain visible above the road.
+@export_range(0.25, 0.80, 0.01) var scenery_horizon := 0.58
 @export var distant_colour := Color(0.10, 0.13, 0.20, 1.0)
 @export var middle_colour := Color(0.16, 0.19, 0.25, 1.0)
 @export var near_colour := Color(0.20, 0.23, 0.28, 1.0)
@@ -77,6 +77,14 @@ func _ready() -> void:
 	_painter.backdrop = self
 	add_child(_painter, false, Node.INTERNAL_MODE_BACK)
 	get_viewport().size_changed.connect(_painter.queue_redraw)
+
+
+func _process(_delta: float) -> void:
+	# The scenery is drawn in screen space, so camera motion only changes it when
+	# the painter is redrawn. Custom drawing is cached until queue_redraw() is
+	# called, so repaint once per frame while the camera is moving.
+	if _painter != null:
+		_painter.queue_redraw()
 
 
 func _paint(canvas: CanvasItem) -> void:
@@ -107,9 +115,9 @@ func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
 	var camera_x := camera.global_position.x if camera != null else 0.0
 	var horizon := size.y * scenery_horizon
 
-	_paint_scenery_band(canvas, size, camera_x, horizon, distant_parallax, size.y * 0.34, distant_colour, 0)
-	_paint_scenery_band(canvas, size, camera_x, horizon, middle_parallax, size.y * 0.24, middle_colour, 1)
-	_paint_scenery_band(canvas, size, camera_x, horizon, near_parallax, size.y * 0.15, near_colour, 2)
+	_paint_scenery_band(canvas, size, camera_x, horizon, distant_parallax, size.y * 0.38, distant_colour, 0)
+	_paint_scenery_band(canvas, size, camera_x, horizon, middle_parallax, size.y * 0.28, middle_colour, 1)
+	_paint_scenery_band(canvas, size, camera_x, horizon, near_parallax, size.y * 0.20, near_colour, 2)
 
 
 func _paint_scenery_band(
