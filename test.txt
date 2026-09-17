@@ -1,0 +1,8 @@
+drop=25
+step=25
+25[
+down drop
+flat 200
+drop.inc(step)
+step.inc(25)
+]

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CarStats" format=3 uid="uid://scrvujiwpofx"]
+
+[ext_resource type="Script" uid="uid://bei3ny7ucxsfe" path="res://scripts/vehicles/car_stats.gd" id="1_stats"]
+
+[sub_resource type="Curve" id="Curve_torque"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.55, 0.9), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[resource]
+script = ExtResource("1_stats")
+torque_curve = SubResource("Curve_torque")
+spring_damping = 5.0
+spring_rest_length = 26.0

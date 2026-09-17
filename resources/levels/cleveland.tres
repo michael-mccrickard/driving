@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://01e6hxd8617p"]
+
+[ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_ox8to"]
+[ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_b8ssv"]
+[ext_resource type="PackedScene" uid="uid://b6w4a4r2o5df7" path="res://scenes/levels/cleveland.tscn" id="3_ox8to"]
+
+[resource]
+script = ExtResource("2_b8ssv")
+display_name = "Cleveland"
+save_id = "cleveland"
+track = ExtResource("3_ox8to")
+car = ExtResource("1_ox8to")
+burn_rate = 0.004
+max_speed_kmh = 80.0
+music = "track16.mp3"

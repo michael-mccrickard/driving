@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://c2kgdmt3bwlcf"]
+
+[ext_resource type="Script" uid="uid://pgveovryjjou" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://c4ctyl3rwg8mr" path="res://scenes/ui/hud.tscn" id="4_hud"]
+[ext_resource type="Script" uid="uid://dbo6ug3mlfphh" path="res://scripts/camera/follow_camera.gd" id="5_camera"]
+[ext_resource type="Script" uid="uid://4hyvc44k6m1l" path="res://scripts/audio/music_player.gd" id="6_music"]
+[ext_resource type="Script" path="res://scripts/audio/sound_player.gd" id="7_sfx"]
+
+[node name="Main" type="Node2D" unique_id=1695115744]
+script = ExtResource("1_main")
+
+[node name="FollowCamera" type="Camera2D" parent="." unique_id=790621759]
+script = ExtResource("5_camera")
+
+[node name="Hud" parent="." unique_id=92684132 instance=ExtResource("4_hud")]
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=745679001]
+script = ExtResource("6_music")
+
+[node name="Sfx" type="AudioStreamPlayer" parent="." unique_id=745679002]
+script = ExtResource("7_sfx")

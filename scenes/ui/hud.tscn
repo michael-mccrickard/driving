@@ -1,0 +1,321 @@
+[gd_scene format=3 uid="uid://c4ctyl3rwg8mr"]
+
+[ext_resource type="Script" uid="uid://crnqxpnd7wnyu" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="Texture2D" uid="uid://bvuqm5kq26pyy" path="res://assets/UI/fuel_used.png" id="2_oj5la"]
+[ext_resource type="Texture2D" uid="uid://c3ffscsju02hn" path="res://assets/UI/level_name.png" id="3_gss2c"]
+[ext_resource type="Texture2D" uid="uid://clvx6l8qtrllg" path="res://assets/UI/next.png" id="4_h022r"]
+[ext_resource type="Texture2D" uid="uid://cw2yn6ojxdmvr" path="res://assets/UI/radio.png" id="5_4jqwt"]
+[ext_resource type="Texture2D" uid="uid://dm0wis2lr8x8i" path="res://assets/UI/restart.png" id="6_kicr4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oj5la"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0h1do"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4jqwt"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gss2c"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_erw67"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kicr4"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h022r"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4d46k"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mj13f"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_result"]
+content_margin_left = 36.0
+content_margin_top = 26.0
+content_margin_right = 36.0
+content_margin_bottom = 26.0
+bg_color = Color(0.04, 0.06, 0.11, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 0.62, 0.8, 0.9)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="Hud" type="CanvasLayer" unique_id=1404315820]
+script = ExtResource("1_hud")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=835604705]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 112
+
+[node name="Readout" type="VBoxContainer" parent="Margin" unique_id=1963219701]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/separation = 2
+
+[node name="Fuel" type="HBoxContainer" parent="Margin/Readout" unique_id=1583410276]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 10
+
+[node name="FuelName" type="Label" parent="Margin/Readout/Fuel" unique_id=367078163]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.42, 0.38, 1)
+theme_override_font_sizes/font_size = 20
+text = "OUT OF FUEL"
+vertical_alignment = 1
+
+[node name="SpeedLabel" type="Label" parent="Margin/Readout" unique_id=1439381461]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "0 km/h"
+
+[node name="Tuning" type="GridContainer" parent="Margin/Readout" unique_id=983218505]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 4
+columns = 2
+
+[node name="BurnRateName" type="Label" parent="Margin/Readout/Tuning" unique_id=1450174364]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.66, 0.8, 1)
+theme_override_font_sizes/font_size = 16
+text = "burn /ms"
+vertical_alignment = 1
+
+[node name="BurnRateInput" type="SpinBox" parent="Margin/Readout/Tuning" unique_id=481139459]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+max_value = 0.05
+step = 0.0001
+value = 0.004
+alignment = 2
+select_all_on_focus = true
+
+[node name="MaxSpeedName" type="Label" parent="Margin/Readout/Tuning" unique_id=1538717659]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.66, 0.8, 1)
+theme_override_font_sizes/font_size = 16
+text = "max km/h"
+vertical_alignment = 1
+
+[node name="MaxSpeedInput" type="SpinBox" parent="Margin/Readout/Tuning" unique_id=1881576389]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+max_value = 400.0
+value = 80.0
+alignment = 2
+select_all_on_focus = true
+
+[node name="MusicName" type="Label" parent="Margin/Readout/Tuning" unique_id=1978076852]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.66, 0.8, 1)
+theme_override_font_sizes/font_size = 16
+text = "Music"
+vertical_alignment = 1
+
+[node name="MusicInput" type="LineEdit" parent="Margin/Readout/Tuning" unique_id=1467799639]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "default.mp3"
+select_all_on_focus = true
+
+[node name="DistanceLabel" type="Label" parent="Margin/Readout" unique_id=702512885]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.89, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "0.0 m"
+
+[node name="BestLabel" type="Label" parent="Margin/Readout" unique_id=1232209118]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.66, 0.8, 1)
+theme_override_font_sizes/font_size = 16
+text = "Best  --"
+
+[node name="RestartButton" type="Button" parent="." unique_id=1863170340]
+unique_name_in_owner = true
+offset_left = 16.0
+offset_top = 633.0
+offset_right = 591.0
+offset_bottom = 883.0
+scale = Vector2(0.3, 0.3)
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_oj5la")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0h1do")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4jqwt")
+icon = ExtResource("6_kicr4")
+
+[node name="MusicToggle" type="Button" parent="." unique_id=1385078214]
+unique_name_in_owner = true
+offset_left = 202.00002
+offset_top = 620.0
+offset_right = 468.0
+offset_bottom = 896.0
+scale = Vector2(0.3, 0.3)
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_gss2c")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_erw67")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kicr4")
+icon = ExtResource("5_4jqwt")
+
+[node name="ClearRecordButton" type="Button" parent="." unique_id=1628229326]
+unique_name_in_owner = true
+offset_left = 193.0
+offset_top = 654.0
+offset_right = 282.0
+offset_bottom = 685.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+text = "Reset best"
+
+[node name="NextColumn" type="VBoxContainer" parent="." unique_id=1342295891]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -28.0
+offset_right = -28.0
+offset_bottom = -28.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="LevelMenu" type="HBoxContainer" parent="NextColumn" unique_id=1065495947]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="NextButton" type="Button" parent="NextColumn" unique_id=45043856]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(133, 66)
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_h022r")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4d46k")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mj13f")
+icon = ExtResource("4_h022r")
+expand_icon = true
+
+[node name="FuelUsedSprite" type="Sprite2D" parent="." unique_id=866569430]
+position = Vector2(648, 50)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_oj5la")
+
+[node name="LevelNameSprite" type="Sprite2D" parent="." unique_id=114614946]
+position = Vector2(143, 56)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_gss2c")
+
+[node name="LevelLabel" type="Label" parent="." unique_id=464199767]
+unique_name_in_owner = true
+offset_left = 100.0
+offset_top = 22.0
+offset_right = 244.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Level"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FuelValue" type="Label" parent="." unique_id=1475306045]
+unique_name_in_owner = true
+offset_left = 618.0
+offset_top = 14.000002
+offset_right = 756.0
+offset_bottom = 81.0
+theme_override_colors/font_color = Color(0.85, 0.89, 1, 1)
+theme_override_font_sizes/font_size = 48
+text = "0.0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ResultPanel" type="PanelContainer" parent="." unique_id=1090999121]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_result")
+
+[node name="Stats" type="VBoxContainer" parent="ResultPanel" unique_id=1783460255]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="FuelLine" type="Label" parent="ResultPanel/Stats" unique_id=1998337412]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.89, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "FuelLine"
+horizontal_alignment = 1
+
+[node name="RecordLine" type="Label" parent="ResultPanel/Stats" unique_id=1206655033]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.89, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "RecordLine"
+horizontal_alignment = 1
+
+[node name="SpeedLine" type="Label" parent="ResultPanel/Stats" unique_id=1475902688]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.89, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "SpeedLine"
+horizontal_alignment = 1
+
+[node name="DistanceLine" type="Label" parent="ResultPanel/Stats" unique_id=1320477946]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.89, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "DistanceLine"
+horizontal_alignment = 1

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://dfxe8ap1mhb3u"]
+
+[ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_v84rs"]
+[ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_revsb"]
+[ext_resource type="PackedScene" uid="uid://c8a2nurfau4ox" path="res://scenes/levels/high_hills.tscn" id="3_6gcrk"]
+
+[resource]
+script = ExtResource("2_revsb")
+display_name = "London"
+save_id = "london"
+track = ExtResource("3_6gcrk")
+car = ExtResource("1_v84rs")
+burn_rate = 0.004
+max_speed_kmh = 80.0
+music = "track7.mp3"

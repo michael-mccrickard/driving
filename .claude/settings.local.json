@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/Applications/Godot4.6Stable.app/Contents/MacOS/Godot --version)",
+      "Bash(/Applications/Godot4.4.app/Contents/MacOS/Godot --version)",
+      "Bash(/Applications/Godot4.6Stable.app/Contents/MacOS/Godot --headless --import)",
+      "Bash(timeout 90 /Applications/Godot4.6Stable.app/Contents/MacOS/Godot --headless --quit-after 400)",
+      "Bash(/Applications/Godot4.6Stable.app/Contents/MacOS/Godot --headless --quit-after 400)",
+      "Bash(python3 -)",
+      "Bash(cp /tmp/diag.gd /Users/michaelmccrickard/driving/tests/_diag.gd)",
+      "Bash(/Applications/Godot4.6Stable.app/Contents/MacOS/Godot --headless res://tests/_diag.tscn)",
+      "Bash(/Applications/Godot4.6Stable.app/Contents/MacOS/Godot --headless --path . --script res://tests/tmp_stairs_check.gd)"
+    ]
+  }
+}

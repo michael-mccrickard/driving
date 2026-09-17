@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://bjrtqvj6ny61d"]
+
+[ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_terwu"]
+[ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_l0ufj"]
+[ext_resource type="PackedScene" uid="uid://c8a2nurfau4ox" path="res://scenes/levels/high_hills.tscn" id="3_mqicx"]
+
+[resource]
+script = ExtResource("2_l0ufj")
+display_name = "High Hills"
+save_id = "high_hills"
+track = ExtResource("3_mqicx")
+car = ExtResource("1_terwu")
+burn_rate = 0.004
+max_speed_kmh = 80.0
+music = "track3.mp3"

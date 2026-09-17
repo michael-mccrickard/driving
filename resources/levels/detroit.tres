@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://b8jgwnkhnohb0"]
+
+[ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_l1vcg"]
+[ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_m6qvh"]
+[ext_resource type="PackedScene" uid="uid://c1h25t1tg24wt" path="res://scenes/levels/detroit.tscn" id="3_vlrtm"]
+
+[resource]
+script = ExtResource("2_m6qvh")
+display_name = "Detroit"
+save_id = "detroit"
+track = ExtResource("3_vlrtm")
+car = ExtResource("1_l1vcg")
+burn_rate = 0.004
+max_speed_kmh = 80.0
+music = "track17.mp3"

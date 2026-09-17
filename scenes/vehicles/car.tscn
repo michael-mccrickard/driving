@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://cr7f6aat852m8"]
+
+[ext_resource type="Script" uid="uid://b7d1y88g4xgpf" path="res://scripts/vehicles/car.gd" id="1_car"]
+[ext_resource type="Resource" uid="uid://scrvujiwpofx" path="res://resources/vehicles/default_car.tres" id="2_stats"]
+[ext_resource type="Script" uid="uid://wqf4n5iffnuy" path="res://scripts/vehicles/wheel_visual.gd" id="3_wheel"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_chassis"]
+friction = 0.2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_chassis"]
+size = Vector2(96, 32)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_wheel"]
+resource_local_to_scene = true
+friction = 3.0
+rough = true
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wheel"]
+radius = 16.0
+
+[node name="Car" type="Node2D" unique_id=1171316816]
+script = ExtResource("1_car")
+stats = ExtResource("2_stats")
+
+[node name="Chassis" type="RigidBody2D" parent="." unique_id=216262780]
+collision_layer = 2
+mass = 4.0
+physics_material_override = SubResource("PhysicsMaterial_chassis")
+center_of_mass_mode = 1
+center_of_mass = Vector2(0, 10)
+continuous_cd = 1
+contact_monitor = true
+max_contacts_reported = 4
+
+[node name="Collision" type="CollisionShape2D" parent="Chassis" unique_id=901144084]
+shape = SubResource("RectangleShape2D_chassis")
+
+[node name="Body" type="Polygon2D" parent="Chassis" unique_id=672395788]
+color = Color(0.909804, 0.447059, 0.290196, 1)
+polygon = PackedVector2Array(-48, 16, -48, -6, -22, -6, -8, -19, 20, -19, 31, -6, 48, -6, 48, 16)
+
+[node name="Windscreen" type="Polygon2D" parent="Chassis" unique_id=1564047592]
+color = Color(0.560784, 0.729412, 0.858824, 1)
+polygon = PackedVector2Array(-5, -15, 17, -15, 25, -7, -12, -7)
+
+[node name="WheelBack" type="RigidBody2D" parent="." unique_id=934384390]
+position = Vector2(-34, 22)
+collision_layer = 2
+mass = 0.8
+physics_material_override = SubResource("PhysicsMaterial_wheel")
+continuous_cd = 1
+contact_monitor = true
+max_contacts_reported = 4
+
+[node name="Collision" type="CollisionShape2D" parent="WheelBack" unique_id=2100352840]
+shape = SubResource("CircleShape2D_wheel")
+
+[node name="Visual" type="Node2D" parent="WheelBack" unique_id=967460724]
+script = ExtResource("3_wheel")
+
+[node name="WheelFront" type="RigidBody2D" parent="." unique_id=476635925]
+position = Vector2(34, 22)
+collision_layer = 2
+mass = 0.8
+physics_material_override = SubResource("PhysicsMaterial_wheel")
+continuous_cd = 1
+contact_monitor = true
+max_contacts_reported = 4
+
+[node name="Collision" type="CollisionShape2D" parent="WheelFront" unique_id=691930723]
+shape = SubResource("CircleShape2D_wheel")
+
+[node name="Visual" type="Node2D" parent="WheelFront" unique_id=541553526]
+script = ExtResource("3_wheel")
+
+[node name="GrooveBack" type="GrooveJoint2D" parent="." unique_id=1754586582]
+position = Vector2(-34, 2)
+node_a = NodePath("../Chassis")
+node_b = NodePath("../WheelBack")
+length = 40.0
+initial_offset = 20.0
+
+[node name="SpringBack" type="DampedSpringJoint2D" parent="." unique_id=451305969]
+position = Vector2(-34, 2)
+node_a = NodePath("../Chassis")
+node_b = NodePath("../WheelBack")
+length = 20.0
+rest_length = 26.0
+stiffness = 500.0
+damping = 5.0
+
+[node name="GrooveFront" type="GrooveJoint2D" parent="." unique_id=1479588040]
+position = Vector2(34, 2)
+node_a = NodePath("../Chassis")
+node_b = NodePath("../WheelFront")
+length = 40.0
+initial_offset = 20.0
+
+[node name="SpringFront" type="DampedSpringJoint2D" parent="." unique_id=375782162]
+position = Vector2(34, 2)
+node_a = NodePath("../Chassis")
+node_b = NodePath("../WheelFront")
+length = 20.0
+rest_length = 26.0
+stiffness = 500.0
+damping = 5.0
