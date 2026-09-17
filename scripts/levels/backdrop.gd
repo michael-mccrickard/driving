@@ -50,9 +50,10 @@ extends CanvasLayer
 @export_range(0.0, 1.0, 0.01) var distant_parallax := 0.10
 @export_range(0.0, 1.0, 0.01) var middle_parallax := 0.25
 @export_range(0.0, 1.0, 0.01) var near_parallax := 0.50
-## The baseline sits below the normal terrain horizon so that the upper
-## portions of all three silhouettes remain visible above the road.
-@export_range(0.25, 0.80, 0.01) var scenery_horizon := 0.58
+## The scenery ground line is deliberately aligned with the starting road
+## level. The silhouettes grow upward from this line and the terrain is drawn
+## in front of them, so hills remain behind dips and rises in the track.
+@export_range(0.25, 0.80, 0.01) var scenery_ground := 0.56
 @export var distant_colour := Color(0.10, 0.13, 0.20, 1.0)
 @export var middle_colour := Color(0.16, 0.19, 0.25, 1.0)
 @export var near_colour := Color(0.20, 0.23, 0.28, 1.0)
@@ -113,18 +114,18 @@ func _paint_stars(canvas: CanvasItem, size: Vector2) -> void:
 func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
 	var camera := get_viewport().get_camera_2d()
 	var camera_x := camera.global_position.x if camera != null else 0.0
-	var horizon := size.y * scenery_horizon
+	var ground := size.y * scenery_ground
 
-	_paint_scenery_band(canvas, size, camera_x, horizon, distant_parallax, size.y * 0.38, distant_colour, 0)
-	_paint_scenery_band(canvas, size, camera_x, horizon, middle_parallax, size.y * 0.28, middle_colour, 1)
-	_paint_scenery_band(canvas, size, camera_x, horizon, near_parallax, size.y * 0.20, near_colour, 2)
+	_paint_scenery_band(canvas, size, camera_x, ground, distant_parallax, size.y * 0.38, distant_colour, 0)
+	_paint_scenery_band(canvas, size, camera_x, ground, middle_parallax, size.y * 0.28, middle_colour, 1)
+	_paint_scenery_band(canvas, size, camera_x, ground, near_parallax, size.y * 0.20, near_colour, 2)
 
 
 func _paint_scenery_band(
 	canvas: CanvasItem,
 	size: Vector2,
 	camera_x: float,
-	horizon: float,
+	ground: float,
 	parallax: float,
 	height: float,
 	colour: Color,
@@ -138,7 +139,7 @@ func _paint_scenery_band(
 		var rng := RandomNumberGenerator.new()
 		rng.seed = backdrop_seed + band * 100003 + strip_index
 		var points := PackedVector2Array()
-		points.append(Vector2(x, horizon + height))
+		points.append(Vector2(x, ground))
 
 		var count = max(3, scenery_points)
 		for i in count:
@@ -148,10 +149,10 @@ func _paint_scenery_band(
 			var width := rng.randf_range(0.12, 0.30)
 			var distance := absf(t - peak) / width
 			var shape := maxf(0.0, 1.0 - distance)
-			var y := horizon + height * (1.0 - shape * rng.randf_range(0.65, 1.0))
+			var y := ground - height * shape * rng.randf_range(0.65, 1.0)
 			points.append(Vector2(px, y))
 
-		points.append(Vector2(x + scenery_repeat_width, horizon + height))
+		points.append(Vector2(x + scenery_repeat_width, ground))
 		points.append(Vector2(x + scenery_repeat_width, size.y + 20.0))
 		points.append(Vector2(x, size.y + 20.0))
 		canvas.draw_colored_polygon(points, colour)
