@@ -28,19 +28,14 @@ extends CanvasLayer
 	set(value):
 		star_size = value
 		_request_repaint()
-## How much smaller than star_size the smallest stars are, as a fraction of it.
 @export_range(0.0, 0.9, 0.05) var star_size_spread := 0.6:
 	set(value):
 		star_size_spread = value
 		_request_repaint()
-## Fraction of the screen, from the top, that stars are scattered over. The rest
-## is where the ground and the track are, and a star behind the hills is just a
-## speck the terrain hides anyway.
 @export_range(0.1, 1.0, 0.01) var star_field_height := 0.75:
 	set(value):
 		star_field_height = value
 		_request_repaint()
-## Alpha of the faintest stars. The brightest are always fully opaque.
 @export_range(0.0, 1.0, 0.05) var star_faintest := 0.25:
 	set(value):
 		star_faintest = value
@@ -55,23 +50,18 @@ extends CanvasLayer
 @export_range(0.0, 1.0, 0.01) var distant_parallax := 0.10
 @export_range(0.0, 1.0, 0.01) var middle_parallax := 0.25
 @export_range(0.0, 1.0, 0.01) var near_parallax := 0.50
-## Screen fraction where the scenery meets the ground. Kept above the track so
-## the terrain itself masks the bottoms of the silhouettes.
-@export_range(0.35, 0.95, 0.01) var scenery_horizon := 0.62
+## The scenery now starts considerably higher on screen. This leaves enough of
+## each silhouette visible above the terrain on ordinary sections of track.
+@export_range(0.25, 0.80, 0.01) var scenery_horizon := 0.46
 @export var distant_colour := Color(0.10, 0.13, 0.20, 1.0)
 @export var middle_colour := Color(0.16, 0.19, 0.25, 1.0)
 @export var near_colour := Color(0.20, 0.23, 0.28, 1.0)
 @export_range(200.0, 3000.0, 50.0) var scenery_repeat_width := 1200.0
 @export_range(3, 20, 1) var scenery_points := 8
 
-# The CanvasLayer cannot draw, so one Node2D child does all of it. Made in code
-# and internal, so it never lands in a level scene and cannot be dragged out of
-# shape by hand: the backdrop is generated, not authored.
 var _painter: Painter
 
 
-## The one node that paints. Kept trivial on purpose -- what is drawn is the
-## Backdrop's business, so an element added there needs nothing here.
 class Painter extends Node2D:
 	var backdrop: Backdrop
 
@@ -86,21 +76,15 @@ func _ready() -> void:
 	_painter = Painter.new()
 	_painter.backdrop = self
 	add_child(_painter, false, Node.INTERNAL_MODE_BACK)
-	# The stretch aspect is "expand", so a wide window really is shown more sky
-	# than the design size. Recompose when that changes rather than leaving a
-	# bare strip down the side.
 	get_viewport().size_changed.connect(_painter.queue_redraw)
 
 
-## Everything on the layer, painted back to front. This is the running order new
-## elements join.
 func _paint(canvas: CanvasItem) -> void:
-	_paint_stars(canvas, _canvas_size())
-	_paint_scenery(canvas, _canvas_size())
+	var size := _canvas_size()
+	_paint_stars(canvas, size)
+	_paint_scenery(canvas, size)
 
 
-## A scatter of stars over the upper part of the screen. Deterministic from the
-## seed, so a level's sky is the same every time it loads.
 func _paint_stars(canvas: CanvasItem, size: Vector2) -> void:
 	if star_count <= 0 or star_size <= 0.0:
 		return
@@ -108,29 +92,24 @@ func _paint_stars(canvas: CanvasItem, size: Vector2) -> void:
 	rng.seed = backdrop_seed
 	var field := size.y * star_field_height
 	for i in star_count:
-		# Two rolls, lowest wins: that thins the field out evenly towards the
-		# horizon, where an even scatter would read as a flat speckled texture.
 		var depth := minf(rng.randf(), rng.randf())
 		var at := Vector2(rng.randf() * size.x, depth * field)
 		var radius := star_size * (1.0 - rng.randf() * star_size_spread)
 		var colour := star_colour
-		# Faintest near the horizon as well as smallest, so the two agree.
 		colour.a = lerpf(star_faintest, 1.0, rng.randf() * (1.0 - depth))
 		canvas.draw_circle(at, radius, colour)
 
 
-## Three simple silhouette bands. They are deliberately painted in screen space
-## because this backdrop already owns the screen-space sky; camera motion is
-## converted to the appropriate parallax offset here. The result is cheap,
-## deterministic and automatically works for every existing level scene.
+## Three silhouette bands. They are screen-space because Backdrop already owns
+## the sky; camera motion is converted to a different offset for each depth.
 func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
 	var camera := get_viewport().get_camera_2d()
 	var camera_x := camera.global_position.x if camera != null else 0.0
 	var horizon := size.y * scenery_horizon
 
-	_paint_scenery_band(canvas, size, camera_x, horizon, distant_parallax, size.y * 0.27, distant_colour, 0)
-	_paint_scenery_band(canvas, size, camera_x, horizon, middle_parallax, size.y * 0.18, middle_colour, 1)
-	_paint_scenery_band(canvas, size, camera_x, horizon, near_parallax, size.y * 0.11, near_colour, 2)
+	_paint_scenery_band(canvas, size, camera_x, horizon, distant_parallax, size.y * 0.34, distant_colour, 0)
+	_paint_scenery_band(canvas, size, camera_x, horizon, middle_parallax, size.y * 0.24, middle_colour, 1)
+	_paint_scenery_band(canvas, size, camera_x, horizon, near_parallax, size.y * 0.15, near_colour, 2)
 
 
 func _paint_scenery_band(
@@ -172,10 +151,6 @@ func _paint_scenery_band(
 		strip_index += 1
 
 
-## The canvas the backdrop is composed over, in the pixels the drawing calls use.
-## In the editor the viewport is the editor's own, so compose for the size the
-## game really runs at; at runtime take the live one, which the stretch aspect
-## lets grow wider than that.
 func _canvas_size() -> Vector2:
 	if not Engine.is_editor_hint():
 		var visible := get_viewport().get_visible_rect().size
