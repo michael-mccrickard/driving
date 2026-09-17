@@ -8,20 +8,12 @@ extends CanvasLayer
 ## It is a CanvasLayer on a negative layer rather than a Node2D, so it is drawn
 ## in screen space and the camera never touches it: the sky stays put while the
 ## car drives, which is what scenery at infinity does. Anything that should
-## instead drift with the car is parallax and wants a Parallax2D under the level
-## root, not this.
+## instead drift with the car is parallax and is painted here from camera motion.
 ##
 ## Everything is keyed to `backdrop_seed`, so a level gets its own sky for the
 ## cost of one integer and nothing has to be placed by hand. Like the terrain,
 ## this runs as @tool: changing an export redraws it in the editor immediately.
-##
-## To add an element: give it its own export group, write a `_paint_<thing>()`
-## that draws into the canvas it is handed, and call it from `_paint()` in
-## back-to-front order. Everything is drawn in canvas pixels measured from the
-## top left of the screen, so work in fractions of the size passed in rather
-## than in absolute coordinates -- the window is not a fixed size.
 
-## Each level should give itself its own, or two levels drive under the same sky.
 @export var backdrop_seed := 1337:
 	set(value):
 		backdrop_seed = value
@@ -37,7 +29,6 @@ extends CanvasLayer
 		star_size = value
 		_request_repaint()
 ## How much smaller than star_size the smallest stars are, as a fraction of it.
-## A field all one size reads as a texture rather than as a sky.
 @export_range(0.0, 0.9, 0.05) var star_size_spread := 0.6:
 	set(value):
 		star_size_spread = value
@@ -58,6 +49,20 @@ extends CanvasLayer
 	set(value):
 		star_colour = value
 		_request_repaint()
+
+@export_group("Parallax Scenery")
+## Horizontal movement fractions. Lower values read as farther away.
+@export_range(0.0, 1.0, 0.01) var distant_parallax := 0.10
+@export_range(0.0, 1.0, 0.01) var middle_parallax := 0.25
+@export_range(0.0, 1.0, 0.01) var near_parallax := 0.50
+## Screen fraction where the scenery meets the ground. Kept above the track so
+## the terrain itself masks the bottoms of the silhouettes.
+@export_range(0.35, 0.95, 0.01) var scenery_horizon := 0.62
+@export var distant_colour := Color(0.10, 0.13, 0.20, 1.0)
+@export var middle_colour := Color(0.16, 0.19, 0.25, 1.0)
+@export var near_colour := Color(0.20, 0.23, 0.28, 1.0)
+@export_range(200.0, 3000.0, 50.0) var scenery_repeat_width := 1200.0
+@export_range(3, 20, 1) var scenery_points := 8
 
 # The CanvasLayer cannot draw, so one Node2D child does all of it. Made in code
 # and internal, so it never lands in a level scene and cannot be dragged out of
@@ -91,6 +96,7 @@ func _ready() -> void:
 ## elements join.
 func _paint(canvas: CanvasItem) -> void:
 	_paint_stars(canvas, _canvas_size())
+	_paint_scenery(canvas, _canvas_size())
 
 
 ## A scatter of stars over the upper part of the screen. Deterministic from the
@@ -111,6 +117,59 @@ func _paint_stars(canvas: CanvasItem, size: Vector2) -> void:
 		# Faintest near the horizon as well as smallest, so the two agree.
 		colour.a = lerpf(star_faintest, 1.0, rng.randf() * (1.0 - depth))
 		canvas.draw_circle(at, radius, colour)
+
+
+## Three simple silhouette bands. They are deliberately painted in screen space
+## because this backdrop already owns the screen-space sky; camera motion is
+## converted to the appropriate parallax offset here. The result is cheap,
+## deterministic and automatically works for every existing level scene.
+func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
+	var camera := get_viewport().get_camera_2d()
+	var camera_x := camera.global_position.x if camera != null else 0.0
+	var horizon := size.y * scenery_horizon
+
+	_paint_scenery_band(canvas, size, camera_x, horizon, distant_parallax, size.y * 0.27, distant_colour, 0)
+	_paint_scenery_band(canvas, size, camera_x, horizon, middle_parallax, size.y * 0.18, middle_colour, 1)
+	_paint_scenery_band(canvas, size, camera_x, horizon, near_parallax, size.y * 0.11, near_colour, 2)
+
+
+func _paint_scenery_band(
+	canvas: CanvasItem,
+	size: Vector2,
+	camera_x: float,
+	horizon: float,
+	parallax: float,
+	height: float,
+	colour: Color,
+	band: int
+) -> void:
+	var offset := -fposmod(camera_x * parallax, scenery_repeat_width)
+	var x := offset - scenery_repeat_width
+	var strip_index := floori(camera_x * parallax / scenery_repeat_width)
+
+	while x < size.x + scenery_repeat_width:
+		var rng := RandomNumberGenerator.new()
+		rng.seed = backdrop_seed + band * 100003 + strip_index
+		var points := PackedVector2Array()
+		points.append(Vector2(x, horizon + height))
+
+		var count := max(3, scenery_points)
+		for i in count:
+			var t := float(i) / float(count - 1)
+			var px := x + t * scenery_repeat_width
+			var peak := rng.randf_range(0.15, 0.85)
+			var width := rng.randf_range(0.12, 0.30)
+			var distance := absf(t - peak) / width
+			var shape := maxf(0.0, 1.0 - distance)
+			var y := horizon + height * (1.0 - shape * rng.randf_range(0.65, 1.0))
+			points.append(Vector2(px, y))
+
+		points.append(Vector2(x + scenery_repeat_width, horizon + height))
+		points.append(Vector2(x + scenery_repeat_width, size.y + 20.0))
+		points.append(Vector2(x, size.y + 20.0))
+		canvas.draw_colored_polygon(points, colour)
+		x += scenery_repeat_width
+		strip_index += 1
 
 
 ## The canvas the backdrop is composed over, in the pixels the drawing calls use.
