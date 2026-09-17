@@ -143,8 +143,8 @@ func _paint_scenery_band(
 	colour: Color,
 	band: int
 ) -> void:
-	var offset := -fposmod(camera_x * parallax, scenery_repeat_width)
-	var x := offset - scenery_repeat_width
+	var offset = -fposmod(camera_x * parallax, scenery_repeat_width)
+	var x = offset - scenery_repeat_width
 	var strip_index := floori(camera_x * parallax / scenery_repeat_width)
 
 	while x < size.x + scenery_repeat_width:
@@ -153,10 +153,10 @@ func _paint_scenery_band(
 		var points := PackedVector2Array()
 		points.append(Vector2(x, horizon + height))
 
-		var count := max(3, scenery_points)
+		var count = max(3, scenery_points)
 		for i in count:
 			var t := float(i) / float(count - 1)
-			var px := x + t * scenery_repeat_width
+			var px = x + t * scenery_repeat_width
 			var peak := rng.randf_range(0.15, 0.85)
 			var width := rng.randf_range(0.12, 0.30)
 			var distance := absf(t - peak) / width
