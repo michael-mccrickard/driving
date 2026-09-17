@@ -13,3 +13,4 @@ car = ExtResource("1_0smtw")
 burn_rate = 0.004
 max_speed_kmh = 80.0
 music = "track22.mp3"
+parallax_speed_multiplier = 0.65
