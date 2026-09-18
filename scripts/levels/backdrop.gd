@@ -230,12 +230,12 @@ func _paint_hills_rolling_band(canvas: CanvasItem, size: Vector2, camera_x: floa
 	while x < size.x + scenery_repeat_width:
 		var rng := RandomNumberGenerator.new()
 		rng.seed = backdrop_seed + 600001 + band * 100003 + strip_index
-		var control_count := 10
+		var control_count := 7
 		var values := []
 		for i in control_count:
 			values.append(rng.randf_range(0.18, 0.82))
 
-		for _pass in 2:
+		for _pass in 3:
 			var smoothed := []
 			smoothed.append(values[0])
 			for i in range(1, control_count - 1):
@@ -251,6 +251,8 @@ func _paint_hills_rolling_band(canvas: CanvasItem, size: Vector2, camera_x: floa
 			var position := t * float(control_count - 1)
 			var index := clampi(floori(position), 0, control_count - 2)
 			var blend := position - float(index)
+			# Ease between control points so the hills have broad, natural shoulders.
+			blend = blend * blend * (3.0 - 2.0 * blend)
 			var value := lerpf(values[index], values[index + 1], blend)
 			var y := ground - height * value * variation
 			points.append(Vector2(x + t * scenery_repeat_width, y))
