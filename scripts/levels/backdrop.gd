@@ -175,7 +175,7 @@ func _level_parallax_speed_multiplier() -> float:
 
 func _paint_hills_scenery(canvas: CanvasItem, size: Vector2, camera_x: float, ground: float, speed_multiplier: float) -> void:
 	_paint_hills_mountains(canvas, size, camera_x, ground, distant_parallax * speed_multiplier)
-	_paint_hills_rolling_band(canvas, size, camera_x, ground, middle_parallax * speed_multiplier, size.y * 0.27, middle_colour, 1, 0.55)
+	_paint_hills_rolling_band(canvas, size, camera_x, ground, middle_parallax * speed_multiplier, size.y * 0.29, middle_colour, 1, 0.70)
 	_paint_hills_rolling_band(canvas, size, camera_x, ground, near_parallax * speed_multiplier, size.y * 0.17, near_colour, 2, 0.30)
 
 
@@ -230,12 +230,12 @@ func _paint_hills_rolling_band(canvas: CanvasItem, size: Vector2, camera_x: floa
 	while x < size.x + scenery_repeat_width:
 		var rng := RandomNumberGenerator.new()
 		rng.seed = backdrop_seed + 600001 + band * 100003 + strip_index
-		var control_count := 7
+		var control_count := 8
 		var values := []
 		for i in control_count:
 			values.append(rng.randf_range(0.18, 0.82))
 
-		for _pass in 3:
+		for _pass in 2:
 			var smoothed := []
 			smoothed.append(values[0])
 			for i in range(1, control_count - 1):
