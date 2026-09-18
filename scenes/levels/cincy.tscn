@@ -26,7 +26,6 @@ scale = Vector2(0.55419356, 0.66818184)
 texture = ExtResource("2_5lq4p")
 
 [node name="Terrain" type="StaticBody2D" parent="." unique_id=318168794]
-visible = false
 collision_mask = 0
 script = ExtResource("3_e7yt6")
 shape_text = "down 100 30
