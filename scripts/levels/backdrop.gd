@@ -193,7 +193,7 @@ func _paint_hills_mountains(canvas: CanvasItem, size: Vector2, camera_x: float, 
 			var center := (float(peak_index) + 0.5) / float(peak_count)
 			center += rng.randf_range(-0.07, 0.07)
 			var peak_height := rng.randf_range(0.62, 1.0)
-			var peak_width := rng.randf_range(0.14, 0.25)
+			var peak_width := rng.randf_range(0.18, 0.30)
 			peaks.append([center, peak_height, peak_width])
 
 		var points := PackedVector2Array()
