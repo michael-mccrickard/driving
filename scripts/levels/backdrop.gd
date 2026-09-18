@@ -198,12 +198,12 @@ func _paint_hills_mountains(canvas: CanvasItem, size: Vector2, camera_x: float, 
 
 		var points := PackedVector2Array()
 		points.append(Vector2(x, ground))
-		var count := max(12, scenery_points * 2)
+		var count = max(12, scenery_points * 2)
 		for i in count:
 			var t := float(i) / float(count - 1)
 			var ridge := 0.0
 			for peak in peaks:
-				var distance := absf(t - peak[0]) / peak[2]
+				var distance = absf(t - peak[0]) / peak[2]
 				var shape := clampf(1.0 - distance, 0.0, 1.0)
 				shape = pow(shape, 0.72)
 				ridge = maxf(ridge, shape * peak[1])
@@ -242,7 +242,7 @@ func _paint_hills_rolling_band(canvas: CanvasItem, size: Vector2, camera_x: floa
 
 		var points := PackedVector2Array()
 		points.append(Vector2(x, ground))
-		var count := max(12, scenery_points * 2)
+		var count = max(12, scenery_points * 2)
 		for i in count:
 			var t := float(i) / float(count - 1)
 			var position := t * float(control_count - 1)
