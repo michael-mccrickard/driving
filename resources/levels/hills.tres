@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="1_config"]
 [ext_resource type="PackedScene" uid="uid://bork4i4hb5u20" path="res://scenes/levels/hills.tscn" id="2_track"]
 [ext_resource type="PackedScene" path="res://scenes/vehicles/car.tscn" id="3_car"]
+[ext_resource type="Resource" path="res://resources/scenery/hills.tres" id="4_scenery"]
 
 [resource]
 script = ExtResource("1_config")
@@ -13,3 +14,4 @@ car = ExtResource("3_car")
 burn_rate = 0.004
 max_speed_kmh = 80.0
 scenery_environment = "Hills"
+scenery_config = ExtResource("4_scenery")
