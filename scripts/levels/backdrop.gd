@@ -191,22 +191,25 @@ func _paint_hills_mountains(canvas: CanvasItem, size: Vector2, camera_x: float, 
 		var peaks := []
 		for peak_index in peak_count:
 			var center := (float(peak_index) + 0.5) / float(peak_count)
-			center += rng.randf_range(-0.08, 0.08)
-			var peak_height := rng.randf_range(0.60, 1.0)
-			var peak_width := rng.randf_range(0.12, 0.22)
+			center += rng.randf_range(-0.07, 0.07)
+			var peak_height := rng.randf_range(0.62, 1.0)
+			var peak_width := rng.randf_range(0.14, 0.25)
 			peaks.append([center, peak_height, peak_width])
 
 		var points := PackedVector2Array()
 		points.append(Vector2(x, ground))
-		var count = max(12, scenery_points * 2)
+		var count = max(16, scenery_points * 3)
 		for i in count:
 			var t := float(i) / float(count - 1)
-			var ridge := 0.0
+			var ridge := 0.08
 			for peak in peaks:
 				var distance = absf(t - peak[0]) / peak[2]
 				var shape := clampf(1.0 - distance, 0.0, 1.0)
-				shape = pow(shape, 0.72)
+				# A rounded peak with broad shoulders reads as a distant
+				# mountain range rather than a row of triangles.
+				shape = shape * shape * (3.0 - 2.0 * shape)
 				ridge = maxf(ridge, shape * peak[1])
+
 			var y := ground - size.y * 0.38 * ridge
 			points.append(Vector2(x + t * scenery_repeat_width, y))
 
