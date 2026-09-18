@@ -35,10 +35,12 @@ extends Resource
 @export var music := "default.mp3"
 
 @export_group("Parallax Scenery")
-## Selects the procedural scenery family used by this level. More families can
-## be added here as their procedural artwork is developed.
+## Legacy environment selector retained while existing levels migrate to
+## SceneryConfig resources.
 @export_enum("Generic", "Hills", "Cincy", "Desert", "City", "Coastal")
 var scenery_environment := "Generic"
+## Procedural scenery recipe for this level.
+@export var scenery_config: SceneryConfig
 ## Multiplies all three scenery parallax rates for this level. 1.0 is the normal
 ## speed; values below 1.0 slow the scenery without changing the depth spacing.
 @export_range(0.0, 2.0, 0.05) var parallax_speed_multiplier := 1.0
