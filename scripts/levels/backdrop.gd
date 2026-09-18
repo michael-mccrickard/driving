@@ -165,8 +165,8 @@ func _level_parallax_speed_multiplier() -> float:
 
 func _paint_hills_scenery(canvas: CanvasItem, size: Vector2, camera_x: float, ground: float, speed_multiplier: float, config: SceneryConfig) -> void:
 	_paint_hills_mountains(canvas, size, camera_x, ground, distant_parallax * speed_multiplier, config)
-	_paint_hills_rolling_band(canvas, size, camera_x, ground, middle_parallax * speed_multiplier, config.middle_height, config.middle_colour, 1, config.middle_variation, config.middle_control_points, config.middle_smoothing_passes, config.middle_min_value, config.middle_max_value, config)
-	_paint_hills_rolling_band(canvas, size, camera_x, ground, near_parallax * speed_multiplier, config.near_height, config.near_colour, 2, config.near_variation, config.near_control_points, config.near_smoothing_passes, config.near_min_value, config.near_max_value, config)
+	_paint_hills_rolling_band(canvas, size, camera_x, ground, middle_parallax * speed_multiplier, size.y * config.middle_height, config.middle_colour, 1, config.middle_variation, config.middle_control_points, config.middle_smoothing_passes, config.middle_min_value, config.middle_max_value, config)
+	_paint_hills_rolling_band(canvas, size, camera_x, ground, near_parallax * speed_multiplier, size.y * config.near_height, config.near_colour, 2, config.near_variation, config.near_control_points, config.near_smoothing_passes, config.near_min_value, config.near_max_value, config)
 
 
 func _paint_hills_mountains(canvas: CanvasItem, size: Vector2, camera_x: float, ground: float, parallax: float, config: SceneryConfig) -> void:
