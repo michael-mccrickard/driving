@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="SceneryConfig" format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/scenery_config.gd" id="1_scenery"]
+
+[resource]
+script = ExtResource("1_scenery")
+environment = "Hills"
+distant_colour = Color(0.1, 0.13, 0.2, 1)
+middle_colour = Color(0.13, 0.16, 0.22, 1)
+near_colour = Color(0.2, 0.23, 0.28, 1)
+mountain_min_peaks = 1
+mountain_max_peaks = 3
+mountain_min_height = 0.62
+mountain_max_height = 1.0
+mountain_min_width = 0.22
+mountain_max_width = 0.34
+mountain_center_jitter = 0.07
+mountain_base_ridge = 0.08
+mountain_screen_height = 0.38
+middle_height = 0.31
+middle_variation = 0.85
+middle_control_points = 8
+middle_smoothing_passes = 2
+middle_min_value = 0.28
+middle_max_value = 0.82
+near_height = 0.17
+near_variation = 0.30
+near_control_points = 8
+near_smoothing_passes = 2
+near_min_value = 0.28
+near_max_value = 0.82
+tree_min_count = 3
+tree_max_count = 6
+tree_base_height_fraction = 0.30
+tree_min_height = 0.035
+tree_max_height = 0.065
+tree_min_width_fraction = 0.45
+tree_max_width_fraction = 0.70
+tree_contrast = 0.35
+tree_min_position = 0.06
+tree_max_position = 0.94
