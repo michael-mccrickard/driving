@@ -5,3 +5,4 @@
 [resource]
 script = ExtResource("1_scenery")
 environment = "Hills"
+middle_colour = Color(0.9, 0.24299997, 0.25394982, 1)
