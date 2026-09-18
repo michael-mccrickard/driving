@@ -173,6 +173,128 @@ func _level_parallax_speed_multiplier() -> float:
 	return 1.0
 
 
+func _paint_hills_scenery(canvas: CanvasItem, size: Vector2, camera_x: float, ground: float, speed_multiplier: float) -> void:
+	_paint_hills_mountains(canvas, size, camera_x, ground, distant_parallax * speed_multiplier)
+	_paint_hills_rolling_band(canvas, size, camera_x, ground, middle_parallax * speed_multiplier, size.y * 0.27, middle_colour, 1, 0.55)
+	_paint_hills_rolling_band(canvas, size, camera_x, ground, near_parallax * speed_multiplier, size.y * 0.17, near_colour, 2, 0.30)
+
+
+func _paint_hills_mountains(canvas: CanvasItem, size: Vector2, camera_x: float, ground: float, parallax: float) -> void:
+	var offset := -fposmod(camera_x * parallax, scenery_repeat_width)
+	var x := offset - scenery_repeat_width
+	var strip_index := floori(camera_x * parallax / scenery_repeat_width)
+
+	while x < size.x + scenery_repeat_width:
+		var rng := RandomNumberGenerator.new()
+		rng.seed = backdrop_seed + 500003 + strip_index
+		var peak_count := rng.randi_range(3, 5)
+		var peaks := []
+		for peak_index in peak_count:
+			var center := (float(peak_index) + 0.5) / float(peak_count)
+			center += rng.randf_range(-0.08, 0.08)
+			var peak_height := rng.randf_range(0.60, 1.0)
+			var peak_width := rng.randf_range(0.12, 0.22)
+			peaks.append([center, peak_height, peak_width])
+
+		var points := PackedVector2Array()
+		points.append(Vector2(x, ground))
+		var count := max(12, scenery_points * 2)
+		for i in count:
+			var t := float(i) / float(count - 1)
+			var ridge := 0.0
+			for peak in peaks:
+				var distance := absf(t - peak[0]) / peak[2]
+				var shape := clampf(1.0 - distance, 0.0, 1.0)
+				shape = pow(shape, 0.72)
+				ridge = maxf(ridge, shape * peak[1])
+			var y := ground - size.y * 0.38 * ridge
+			points.append(Vector2(x + t * scenery_repeat_width, y))
+
+		points.append(Vector2(x + scenery_repeat_width, ground))
+		points.append(Vector2(x + scenery_repeat_width, size.y + 20.0))
+		points.append(Vector2(x, size.y + 20.0))
+		canvas.draw_colored_polygon(points, distant_colour)
+
+		x += scenery_repeat_width
+		strip_index += 1
+
+
+func _paint_hills_rolling_band(canvas: CanvasItem, size: Vector2, camera_x: float, ground: float, parallax: float, height: float, colour: Color, band: int, variation: float) -> void:
+	var offset := -fposmod(camera_x * parallax, scenery_repeat_width)
+	var x := offset - scenery_repeat_width
+	var strip_index := floori(camera_x * parallax / scenery_repeat_width)
+
+	while x < size.x + scenery_repeat_width:
+		var rng := RandomNumberGenerator.new()
+		rng.seed = backdrop_seed + 600001 + band * 100003 + strip_index
+		var control_count := 10
+		var values := []
+		for i in control_count:
+			values.append(rng.randf_range(0.18, 0.82))
+
+		for _pass in 2:
+			var smoothed := []
+			smoothed.append(values[0])
+			for i in range(1, control_count - 1):
+				smoothed.append((values[i - 1] + values[i] * 2.0 + values[i + 1]) / 4.0)
+			smoothed.append(values[control_count - 1])
+			values = smoothed
+
+		var points := PackedVector2Array()
+		points.append(Vector2(x, ground))
+		var count := max(12, scenery_points * 2)
+		for i in count:
+			var t := float(i) / float(count - 1)
+			var position := t * float(control_count - 1)
+			var index := clampi(floori(position), 0, control_count - 2)
+			var blend := position - float(index)
+			var value := lerpf(values[index], values[index + 1], blend)
+			var y := ground - height * value * variation
+			points.append(Vector2(x + t * scenery_repeat_width, y))
+
+		points.append(Vector2(x + scenery_repeat_width, ground))
+		points.append(Vector2(x + scenery_repeat_width, size.y + 20.0))
+		points.append(Vector2(x, size.y + 20.0))
+		canvas.draw_colored_polygon(points, colour)
+
+		if band == 2:
+			_paint_hills_trees(canvas, size, x, ground, height, values, rng, control_count)
+
+		x += scenery_repeat_width
+		strip_index += 1
+
+
+func _paint_hills_trees(canvas: CanvasItem, size: Vector2, x: float, ground: float, height: float, values: Array, rng: RandomNumberGenerator, control_count: int) -> void:
+	var tree_colour := near_colour.lerp(Color(0.0, 0.0, 0.0, 1.0), 0.18)
+	var tree_count := rng.randi_range(3, 6)
+
+	for tree_index in tree_count:
+		var t := rng.randf_range(0.06, 0.94)
+		var position := t * float(control_count - 1)
+		var index := clampi(floori(position), 0, control_count - 2)
+		var blend := position - float(index)
+		var value := lerpf(values[index], values[index + 1], blend)
+		var base_y := ground - height * value * 0.30
+		var tree_height := rng.randf_range(size.y * 0.035, size.y * 0.065)
+		var tree_width := tree_height * rng.randf_range(0.45, 0.70)
+		var tree_x := x + t * scenery_repeat_width
+
+		canvas.draw_rect(Rect2(tree_x - tree_width * 0.10, base_y - tree_height * 0.28, tree_width * 0.20, tree_height * 0.30), tree_colour)
+		var top := base_y - tree_height
+		var lower := PackedVector2Array([
+			Vector2(tree_x, top),
+			Vector2(tree_x - tree_width * 0.42, base_y - tree_height * 0.38),
+			Vector2(tree_x + tree_width * 0.42, base_y - tree_height * 0.38)
+		])
+		var upper := PackedVector2Array([
+			Vector2(tree_x, top - tree_height * 0.18),
+			Vector2(tree_x - tree_width * 0.32, base_y - tree_height * 0.58),
+			Vector2(tree_x + tree_width * 0.32, base_y - tree_height * 0.58)
+		])
+		canvas.draw_colored_polygon(lower, tree_colour)
+		canvas.draw_colored_polygon(upper, tree_colour)
+
+
 func _paint_scenery_band(
 	canvas: CanvasItem,
 	size: Vector2,
