@@ -175,7 +175,7 @@ func _level_parallax_speed_multiplier() -> float:
 
 func _paint_hills_scenery(canvas: CanvasItem, size: Vector2, camera_x: float, ground: float, speed_multiplier: float) -> void:
 	_paint_hills_mountains(canvas, size, camera_x, ground, distant_parallax * speed_multiplier)
-	_paint_hills_rolling_band(canvas, size, camera_x, ground, middle_parallax * speed_multiplier, size.y * 0.29, middle_colour, 1, 0.70)
+	_paint_hills_rolling_band(canvas, size, camera_x, ground, middle_parallax * speed_multiplier, size.y * 0.31, middle_colour, 1, 0.85)
 	_paint_hills_rolling_band(canvas, size, camera_x, ground, near_parallax * speed_multiplier, size.y * 0.17, near_colour, 2, 0.30)
 
 
@@ -232,16 +232,14 @@ func _paint_hills_rolling_band(canvas: CanvasItem, size: Vector2, camera_x: floa
 		rng.seed = backdrop_seed + 600001 + band * 100003 + strip_index
 		var control_count := 8
 		var values := []
-		for i in control_count:
-			values.append(rng.randf_range(0.18, 0.82))
 
-		for _pass in 2:
-			var smoothed := []
-			smoothed.append(values[0])
-			for i in range(1, control_count - 1):
-				smoothed.append((values[i - 1] + values[i] * 2.0 + values[i + 1]) / 4.0)
-			smoothed.append(values[control_count - 1])
-			values = smoothed
+		# Adjacent strips share their boundary control point. Generate the
+		# underlying values from a global index so the rolling hills continue
+		# smoothly across the seam instead of jumping at each repeat.
+		var global_start := strip_index * (control_count - 1)
+		for i in control_count:
+			var global_index := global_start + i
+			values.append(_hills_smoothed_value(global_index, control_count, band))
 
 		var points := PackedVector2Array()
 		points.append(Vector2(x, ground))
@@ -267,6 +265,26 @@ func _paint_hills_rolling_band(canvas: CanvasItem, size: Vector2, camera_x: floa
 
 		x += scenery_repeat_width
 		strip_index += 1
+
+
+func _hills_smoothed_value(global_index: int, control_count: int, band: int) -> float:
+	# Two deterministic smoothing passes. Because the neighboring values are
+	# generated from global indices, smoothing also remains continuous at strip
+	# boundaries.
+	var first := _hills_raw_value(global_index - 1, band)
+	var current := _hills_raw_value(global_index, band)
+	var next := _hills_raw_value(global_index + 1, band)
+	var first_pass := (first + current * 2.0 + next) / 4.0
+
+	var previous_first := (_hills_raw_value(global_index - 2, band) + first * 2.0 + current) / 4.0
+	var next_first := (current + next * 2.0 + _hills_raw_value(global_index + 2, band)) / 4.0
+	return (previous_first + first_pass * 2.0 + next_first) / 4.0
+
+
+func _hills_raw_value(global_index: int, band: int) -> float:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = backdrop_seed + 600001 + band * 100003 + global_index
+	return rng.randf_range(0.18, 0.82)
 
 
 func _paint_hills_trees(canvas: CanvasItem, size: Vector2, x: float, ground: float, height: float, values: Array, rng: RandomNumberGenerator, control_count: int) -> void:
