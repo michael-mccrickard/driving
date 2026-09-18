@@ -55,7 +55,7 @@ extends CanvasLayer
 ## in front of them, so hills remain behind dips and rises in the track.
 @export_range(0.25, 0.80, 0.01) var scenery_ground := 0.56
 @export var distant_colour := Color(0.10, 0.13, 0.20, 1.0)
-@export var middle_colour := Color(0.16, 0.19, 0.25, 1.0)
+@export var middle_colour := Color(0.13, 0.16, 0.22, 1.0)
 @export var near_colour := Color(0.20, 0.23, 0.28, 1.0)
 @export_range(200.0, 3000.0, 50.0) var scenery_repeat_width := 1200.0
 @export_range(3, 20, 1) var scenery_points := 8
@@ -284,7 +284,7 @@ func _hills_smoothed_value(global_index: int, control_count: int, band: int) -> 
 func _hills_raw_value(global_index: int, band: int) -> float:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = backdrop_seed + 600001 + band * 100003 + global_index
-	return rng.randf_range(0.18, 0.82)
+	return rng.randf_range(0.28, 0.82)
 
 
 func _paint_hills_trees(canvas: CanvasItem, size: Vector2, x: float, ground: float, height: float, values: Array, rng: RandomNumberGenerator, control_count: int) -> void:
