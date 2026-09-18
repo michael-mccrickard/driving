@@ -265,7 +265,7 @@ func _paint_hills_rolling_band(canvas: CanvasItem, size: Vector2, camera_x: floa
 
 
 func _paint_hills_trees(canvas: CanvasItem, size: Vector2, x: float, ground: float, height: float, values: Array, rng: RandomNumberGenerator, control_count: int) -> void:
-	var tree_colour := near_colour.lerp(Color(0.0, 0.0, 0.0, 1.0), 0.18)
+	var tree_colour := near_colour.lerp(Color(0.0, 0.0, 0.0, 1.0), 0.35)
 	var tree_count := rng.randi_range(3, 6)
 
 	for tree_index in tree_count:
