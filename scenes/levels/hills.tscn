@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_f65yb"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_8spva"]
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="9_backdrop"]
+[ext_resource type="Resource" path="res://resources/scenery/hills.tres" id="10_scenery"]
 
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 
@@ -14,6 +15,7 @@
 layer = -100
 script = ExtResource("9_backdrop")
 backdrop_seed = 1101
+scenery_config = ExtResource("10_scenery")
 
 [node name="Terrain" type="StaticBody2D" parent="." unique_id=1086721745]
 collision_mask = 0
