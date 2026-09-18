@@ -210,7 +210,7 @@ func _paint_hills_mountains(canvas: CanvasItem, size: Vector2, camera_x: float, 
 		strip_index += 1
 
 
-func _paint_hills_rolling_band(canvas: CanvasItem, size: Vector2, camera_x: float, ground: float, parallax: float, height: float, colour: Color, band: int, variation: float, control_count: int, smoothing_passes: int, min_value: float, max_value: float) -> void:
+func _paint_hills_rolling_band(canvas: CanvasItem, size: Vector2, camera_x: float, ground: float, parallax: float, height: float, colour: Color, band: int, variation: float, control_count: int, smoothing_passes: int, min_value: float, max_value: float, config: SceneryConfig) -> void:
 	var offset := -fposmod(camera_x * parallax, scenery_repeat_width)
 	var x := offset - scenery_repeat_width
 	var strip_index := floori(camera_x * parallax / scenery_repeat_width)
