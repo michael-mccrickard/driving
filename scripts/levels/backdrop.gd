@@ -187,13 +187,13 @@ func _paint_hills_mountains(canvas: CanvasItem, size: Vector2, camera_x: float, 
 	while x < size.x + scenery_repeat_width:
 		var rng := RandomNumberGenerator.new()
 		rng.seed = backdrop_seed + 500003 + strip_index
-		var peak_count := rng.randi_range(3, 5)
+		var peak_count := rng.randi_range(2, 4)
 		var peaks := []
 		for peak_index in peak_count:
 			var center := (float(peak_index) + 0.5) / float(peak_count)
 			center += rng.randf_range(-0.07, 0.07)
 			var peak_height := rng.randf_range(0.62, 1.0)
-			var peak_width := rng.randf_range(0.18, 0.30)
+			var peak_width := rng.randf_range(0.22, 0.34)
 			peaks.append([center, peak_height, peak_width])
 
 		var points := PackedVector2Array()
