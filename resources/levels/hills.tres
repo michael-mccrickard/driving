@@ -12,3 +12,4 @@ track = ExtResource("2_track")
 car = ExtResource("3_car")
 burn_rate = 0.004
 max_speed_kmh = 80.0
+scenery_environment = "Hills"
