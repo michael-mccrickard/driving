@@ -4,9 +4,7 @@
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_2scwe"]
 [ext_resource type="PackedScene" uid="uid://c21vps3d6hbym" path="res://scenes/levels/cincy.tscn" id="3_0smtw"]
 
-[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="4_scenery"]
 [resource]
-scenery_config = ExtResource("4_scenery")
 script = ExtResource("2_2scwe")
 display_name = "Cincy"
 save_id = "cincy"

@@ -153,7 +153,7 @@ func _paint_scenery_band(
 		var points := PackedVector2Array()
 		points.append(Vector2(x, ground))
 
-		var count := max(3, point_count)
+		var count = max(3, point_count)
 		for i in count:
 			var t := float(i) / float(count - 1)
 			var px := x + t * repeat_width

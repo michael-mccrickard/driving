@@ -18,7 +18,9 @@ point_count = 1
 layer = -100
 script = ExtResource("1_p5p8c")
 backdrop_seed = 11211
+near_parallax = 0.5
 middle_colour = Color(0.16, 0.19, 0.25, 1)
+near_colour = Color(0.2, 0.23, 0.28, 1)
 
 [node name="Enjoy" type="Sprite2D" parent="." unique_id=103323318]
 position = Vector2(245, -115)

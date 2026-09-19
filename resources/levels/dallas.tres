@@ -1,12 +1,10 @@
 [gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://dgecanpvnvy1u"]
 
-[ext_resource type="PackedScene" path="res://scenes/vehicles/car.tscn" id="1_j8wsy"]
+[ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_j8wsy"]
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_ka600"]
 [ext_resource type="PackedScene" uid="uid://cko3c2nk62oik" path="res://scenes/levels/dallas.tscn" id="3_j8wsy"]
 
-[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="4_scenery"]
 [resource]
-scenery_config = ExtResource("4_scenery")
 script = ExtResource("2_ka600")
 display_name = "Dallas"
 save_id = "dallas"

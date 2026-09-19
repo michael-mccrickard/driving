@@ -4,9 +4,7 @@
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_revsb"]
 [ext_resource type="PackedScene" uid="uid://c8a2nurfau4ox" path="res://scenes/levels/high_hills.tscn" id="3_6gcrk"]
 
-[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="4_scenery"]
 [resource]
-scenery_config = ExtResource("4_scenery")
 script = ExtResource("2_revsb")
 display_name = "London"
 save_id = "london"
