@@ -46,7 +46,7 @@ extends CanvasLayer
 
 var _painter: Painter
 
-@tool
+
 class Painter extends Node2D:
 	var backdrop: Backdrop
 
