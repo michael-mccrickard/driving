@@ -36,7 +36,13 @@ extends CanvasLayer
 		_request_repaint()
 
 @export_group("Parallax Scenery")
-@export var scenery_config: SceneryConfig
+@export var scenery_config: SceneryConfig:
+	set(value):
+		if scenery_config != null and scenery_config.changed.is_connected(_on_scenery_config_changed):
+			scenery_config.changed.disconnect(_on_scenery_config_changed)
+		scenery_config = value
+		_connect_scenery_config()
+		_request_repaint()
 
 var _painter: Painter
 
@@ -48,12 +54,34 @@ class Painter extends Node2D:
 			backdrop._paint(self)
 
 func _ready() -> void:
+	_connect_scenery_config()
 	if layer >= 0:
 		push_warning("Backdrop should sit on a negative layer, or it draws over the level.")
 	_painter = Painter.new()
 	_painter.backdrop = self
 	add_child(_painter, false, Node.INTERNAL_MODE_BACK)
 	get_viewport().size_changed.connect(_painter.queue_redraw)
+
+func _connect_scenery_config() -> void:
+	if scenery_config == null:
+		return
+	if not scenery_config.changed.is_connected(_on_scenery_config_changed):
+		scenery_config.changed.connect(_on_scenery_config_changed)
+	_connect_shape_config(scenery_config.distant_shape)
+	_connect_shape_config(scenery_config.middle_shape)
+
+func _connect_shape_config(shape_config: SceneryShapeConfig) -> void:
+	if shape_config == null:
+		return
+	if not shape_config.changed.is_connected(_on_scenery_shape_changed):
+		shape_config.changed.connect(_on_scenery_shape_changed)
+
+func _on_scenery_config_changed() -> void:
+	_connect_scenery_config()
+	_request_repaint()
+
+func _on_scenery_shape_changed() -> void:
+	_request_repaint()
 
 func _process(_delta: float) -> void:
 	if _painter != null:
