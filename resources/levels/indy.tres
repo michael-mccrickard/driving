@@ -4,7 +4,9 @@
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_os0mn"]
 [ext_resource type="PackedScene" uid="uid://dg8i3d324i55x" path="res://scenes/levels/indy.tscn" id="3_g1klv"]
 
+[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="4_scenery"]
 [resource]
+scenery_config = ExtResource("4_scenery")
 script = ExtResource("2_os0mn")
 display_name = "Indy"
 save_id = "indy"
