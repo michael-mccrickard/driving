@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="SceneryConfig" format=3 uid="uid://cnctpwrvumyrf"]
+
+[ext_resource type="Script" uid="uid://cko5cwpnoggms" path="res://scripts/levels/scenery_config.gd" id="1_lj7bn"]
+
+[resource]
+script = ExtResource("1_lj7bn")
