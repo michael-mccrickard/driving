@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_2hojv"]
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_wja0j"]
 [ext_resource type="PackedScene" uid="uid://d3mrwf2h1lcc3" path="res://scenes/levels/boston.tscn" id="3_2hojv"]
-[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="4_scenery"]
+[ext_resource type="Resource" uid="uid://bxw5k6nfgco25" path="res://resources/scenery/generic.tres" id="4_scenery"]
 
 [resource]
 script = ExtResource("2_wja0j")

@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_0smtw"]
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_2scwe"]
+[ext_resource type="Resource" uid="uid://pk50qe1aw228" path="res://resources/scenery/cincy_scenery.tres" id="2_5snoi"]
 [ext_resource type="PackedScene" uid="uid://c21vps3d6hbym" path="res://scenes/levels/cincy.tscn" id="3_0smtw"]
 
 [resource]
@@ -13,4 +14,5 @@ car = ExtResource("1_0smtw")
 burn_rate = 0.004
 max_speed_kmh = 80.0
 music = "track22.mp3"
+scenery_config = ExtResource("2_5snoi")
 parallax_speed_multiplier = 0.65
