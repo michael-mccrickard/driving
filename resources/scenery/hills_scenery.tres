@@ -4,4 +4,6 @@
 
 [resource]
 script = ExtResource("1_lj7bn")
+distant_colour = Color(0.15373814, 0.13396561, 0.018544322, 1)
+middle_colour = Color(0.34875396, 0.39140227, 0.010843185, 1)
 scenery_seed = 1961

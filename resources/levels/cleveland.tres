@@ -2,7 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_ox8to"]
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_b8ssv"]
+[ext_resource type="Script" uid="uid://cko5cwpnoggms" path="res://scripts/levels/scenery_config.gd" id="2_w8v8y"]
 [ext_resource type="PackedScene" uid="uid://b6w4a4r2o5df7" path="res://scenes/levels/cleveland.tscn" id="3_ox8to"]
+
+[sub_resource type="Resource" id="Resource_ai0y4"]
+script = ExtResource("2_w8v8y")
+metadata/_custom_type_script = "uid://cko5cwpnoggms"
 
 [resource]
 script = ExtResource("2_b8ssv")
@@ -13,3 +18,4 @@ car = ExtResource("1_ox8to")
 burn_rate = 0.004
 max_speed_kmh = 80.0
 music = "track16.mp3"
+scenery_config = SubResource("Resource_ai0y4")
