@@ -4,3 +4,15 @@
 
 [resource]
 script = ExtResource("1_scenery")
+scenery_seed = 1337
+ground = 0.56
+repeat_width = 1200.0
+points = 8
+peak_min = 0.15
+peak_max = 0.85
+width_min = 0.12
+width_max = 0.30
+height_min = 0.65
+height_max = 1.0
+distant_height = 0.38
+middle_height = 0.28
