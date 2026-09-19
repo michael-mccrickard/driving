@@ -36,7 +36,10 @@ extends CanvasLayer
 		_request_repaint()
 
 @export_group("Parallax Scenery")
-@export var scenery_config: SceneryConfig
+@export var scenery_config: SceneryConfig:
+	set(value):
+		scenery_config = value
+		_request_repaint()
 
 var _painter: Painter
 
@@ -48,6 +51,8 @@ class Painter extends Node2D:
 			backdrop._paint(self)
 
 func _ready() -> void:
+	if Engine.is_editor_hint() and scenery_config == null:
+		scenery_config = _editor_scenery_config()
 	if layer >= 0:
 		push_warning("Backdrop should sit on a negative layer, or it draws over the level.")
 	_painter = Painter.new()
@@ -79,7 +84,10 @@ func _paint_stars(canvas: CanvasItem, size: Vector2) -> void:
 		canvas.draw_circle(at, radius, colour)
 
 func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
-	if scenery_config == null:
+	var config := scenery_config
+	if Engine.is_editor_hint() and config == null:
+		config = _editor_scenery_config()
+	if config == null:
 		return
 
 	var camera := get_viewport().get_camera_2d()
@@ -88,7 +96,6 @@ func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
 		camera_x = camera.global_position.x
 
 	var speed_multiplier := _level_parallax_speed_multiplier()
-	var config := scenery_config
 
 	var ground := size.y * config.ground
 	var repeat_width := config.repeat_width
@@ -117,6 +124,27 @@ func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
 		repeat_width,
 		config.middle_shape
 	)
+
+
+func _editor_scenery_config() -> SceneryConfig:
+	if not Engine.is_editor_hint():
+		return null
+
+	var scene_path := scene_file_path
+	if scene_path.is_empty():
+		return null
+
+	var scene_name := scene_path.get_file().get_basename()
+	var config_path := "res://resources/levels/%s.tres" % scene_name
+	if not ResourceLoader.exists(config_path):
+		return null
+
+	var level_config := load(config_path) as LevelConfig
+	if level_config == null:
+		return null
+
+	return level_config.scenery_config
+
 
 func _level_parallax_speed_multiplier() -> float:
 	if Engine.is_editor_hint():
