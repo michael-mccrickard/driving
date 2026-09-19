@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="SceneryConfig" format=3 uid="uid://cv4uuibmawom5"]
-
-[ext_resource type="Script" uid="uid://cko5cwpnoggms" path="res://scripts/levels/scenery_config.gd" id="1_scenery"]
-
-[resource]
-script = ExtResource("1_scenery")
-environment = "Hills"
-middle_colour = Color(0.9, 0.24299997, 0.25394982, 1)
