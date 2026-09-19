@@ -92,7 +92,6 @@ func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
 
 	var ground := size.y * config.ground
 	var repeat_width := config.repeat_width
-	var points := config.points
 
 	_paint_scenery_band(
 		canvas,
@@ -104,8 +103,7 @@ func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
 		config.distant_colour,
 		0,
 		repeat_width,
-		points,
-		config
+		config.distant_shape
 	)
 	_paint_scenery_band(
 		canvas,
@@ -117,8 +115,7 @@ func _paint_scenery(canvas: CanvasItem, size: Vector2) -> void:
 		config.middle_colour,
 		1,
 		repeat_width,
-		points,
-		config
+		config.middle_shape
 	)
 
 func _level_parallax_speed_multiplier() -> float:
@@ -150,28 +147,30 @@ func _paint_scenery_band(
 	colour: Color,
 	band: int,
 	repeat_width: float,
-	point_count: int,
-	config: SceneryConfig
+	shape_config: SceneryShapeConfig
 ) -> void:
+	if shape_config == null:
+		return
+
 	var offset = -fposmod(camera_x * parallax, repeat_width)
 	var x = offset - repeat_width
 	var strip_index := floori(camera_x * parallax / repeat_width)
 
 	while x < size.x + repeat_width:
 		var rng := RandomNumberGenerator.new()
-		rng.seed = config.scenery_seed + band * 100003 + strip_index
+		rng.seed = shape_config.scenery_seed + band * 100003 + strip_index
 		var points := PackedVector2Array()
 		points.append(Vector2(x, ground))
 
-		var count = max(3, point_count)
+		var count = max(3, shape_config.points)
 		for i in count:
 			var t := float(i) / float(count - 1)
 			var px = x + t * repeat_width
-			var peak := rng.randf_range(config.peak_min, config.peak_max)
-			var width := rng.randf_range(config.width_min, config.width_max)
+			var peak := rng.randf_range(shape_config.peak_min, shape_config.peak_max)
+			var width := rng.randf_range(shape_config.width_min, shape_config.width_max)
 			var distance := absf(t - peak) / width
 			var shape := maxf(0.0, 1.0 - distance)
-			var y := ground - height * shape * rng.randf_range(config.height_min, config.height_max)
+			var y := ground - height * shape * rng.randf_range(shape_config.height_min, shape_config.height_max)
 			points.append(Vector2(px, y))
 
 		points.append(Vector2(x + repeat_width, ground))
