@@ -6,26 +6,56 @@ extends Resource
 
 @export_group("General")
 ## Vertical position of the base of both scenery layers, as a fraction of the screen height.
-@export_range(0.25, 0.80, 0.01) var ground := 0.56
+@export_range(0.25, 0.80, 0.01) var ground := 0.56:
+	set(value):
+		ground = value
+		emit_changed()
 ## Width of one repeating section of generated scenery, in pixels.
-@export_range(200.0, 3000.0, 50.0) var repeat_width := 1200.0
+@export_range(200.0, 3000.0, 50.0) var repeat_width := 1200.0:
+	set(value):
+		repeat_width = value
+		emit_changed()
 
 @export_group("Distant Layer")
 ## Colour of the more distant scenery layer.
-@export var distant_colour := Color(0.10, 0.13, 0.20, 1.0)
+@export var distant_colour := Color(0.10, 0.13, 0.20, 1.0):
+	set(value):
+		distant_colour = value
+		emit_changed()
 ## How much the distant layer moves relative to the camera. Smaller values make it appear farther away.
-@export_range(0.0, 1.0, 0.01) var distant_parallax := 0.10
+@export_range(0.0, 1.0, 0.01) var distant_parallax := 0.10:
+	set(value):
+		distant_parallax = value
+		emit_changed()
 ## Height of the distant layer's scenery, as a fraction of the screen height.
-@export_range(0.05, 1.00, 0.01) var distant_height := 0.38
+@export_range(0.05, 1.00, 0.01) var distant_height := 0.38:
+	set(value):
+		distant_height = value
+		emit_changed()
 ## Shape recipe used to generate the distant layer.
-@export var distant_shape: SceneryShapeConfig
+@export var distant_shape: SceneryShapeConfig:
+	set(value):
+		distant_shape = value
+		emit_changed()
 
 @export_group("Middle Layer")
 ## Colour of the middle scenery layer.
-@export var middle_colour := Color(0.13, 0.16, 0.22, 1.0)
+@export var middle_colour := Color(0.13, 0.16, 0.22, 1.0):
+	set(value):
+		middle_colour = value
+		emit_changed()
 ## How much the middle layer moves relative to the camera. Larger values make it appear closer.
-@export_range(0.0, 1.0, 0.01) var middle_parallax := 0.25
+@export_range(0.0, 1.0, 0.01) var middle_parallax := 0.25:
+	set(value):
+		middle_parallax = value
+		emit_changed()
 ## Height of the middle layer's scenery, as a fraction of the screen height.
-@export_range(0.05, 1.00, 0.01) var middle_height := 0.28
+@export_range(0.05, 1.00, 0.01) var middle_height := 0.28:
+	set(value):
+		middle_height = value
+		emit_changed()
 ## Shape recipe used to generate the middle layer.
-@export var middle_shape: SceneryShapeConfig
+@export var middle_shape: SceneryShapeConfig:
+	set(value):
+		middle_shape = value
+		emit_changed()
