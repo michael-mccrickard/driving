@@ -44,7 +44,7 @@ extends CanvasLayer
 		_connect_scenery_config()
 		_request_repaint()
 
-var _painter: Painter
+var _painter: BackdropPainter
 
 func _ready() -> void:
 	_connect_scenery_config()
