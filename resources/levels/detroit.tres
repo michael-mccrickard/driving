@@ -4,8 +4,6 @@
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_m6qvh"]
 [ext_resource type="PackedScene" uid="uid://c1h25t1tg24wt" path="res://scenes/levels/detroit.tscn" id="3_vlrtm"]
 
-[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="4_scenery"]
-
 [resource]
 script = ExtResource("2_m6qvh")
 display_name = "Detroit"

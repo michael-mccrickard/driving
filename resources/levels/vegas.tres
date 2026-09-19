@@ -4,8 +4,6 @@
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_43fes"]
 [ext_resource type="PackedScene" uid="uid://ck127ivk67gdk" path="res://scenes/levels/vegas.tscn" id="3_rabxo"]
 
-[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="4_scenery"]
-
 [resource]
 script = ExtResource("2_43fes")
 display_name = "Las Vegas"
