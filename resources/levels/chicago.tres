@@ -4,7 +4,9 @@
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_ls51k"]
 [ext_resource type="PackedScene" uid="uid://dtonq88adv6fs" path="res://scenes/levels/chicago.tscn" id="3_irk74"]
 
+[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="4_scenery"]
 [resource]
+scenery_config = ExtResource("4_scenery")
 script = ExtResource("2_ls51k")
 display_name = "Chicago"
 save_id = "chicago"
