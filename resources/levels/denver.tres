@@ -4,7 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://qn2ejgf27yad" path="res://scenes/levels/denver.tscn" id="2_track"]
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="3_car"]
 
+[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="4_scenery"]
 [resource]
+scenery_config = ExtResource("4_scenery")
 script = ExtResource("1_config")
 display_name = "Denver"
 save_id = "denver"
