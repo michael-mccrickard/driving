@@ -46,22 +46,15 @@ extends CanvasLayer
 
 var _painter: Painter
 
-
-class Painter extends Node2D:
-	var backdrop: Backdrop
-
-	func _draw() -> void:
-		if backdrop != null:
-			backdrop._paint(self)
-
 func _ready() -> void:
 	_connect_scenery_config()
 	if layer >= 0:
 		push_warning("Backdrop should sit on a negative layer, or it draws over the level.")
-	_painter = Painter.new()
-	_painter.backdrop = self
-	add_child(_painter, false, Node.INTERNAL_MODE_BACK)
-	get_viewport().size_changed.connect(_painter.queue_redraw)
+	_painter = get_node_or_null("Painter") as BackdropPainter
+	if _painter != null:
+		_painter.backdrop = self
+		if not get_viewport().size_changed.is_connected(_painter.queue_redraw):
+			get_viewport().size_changed.connect(_painter.queue_redraw)
 
 func _connect_scenery_config() -> void:
 	if scenery_config == null:
