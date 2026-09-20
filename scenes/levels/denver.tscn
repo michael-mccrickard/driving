@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_sg0bl"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_7qpnd"]
 
+[ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="10_painter"]
+
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 
 [node name="Denver" type="Node2D" unique_id=25114719]
@@ -14,6 +16,9 @@
 layer = -100
 script = ExtResource("2_backdrop")
 backdrop_seed = 11211
+
+[node name="Painter" type="Node2D" parent="Backdrop"]
+script = ExtResource("10_painter")
 
 [node name="Enjoy" type="Sprite2D" parent="." unique_id=103323318]
 position = Vector2(891, -296)
