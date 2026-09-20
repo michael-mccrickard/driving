@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_c2d7m"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_7uwsg"]
 
+[ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="10_painter"]
+
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 _data = {
 "points": PackedVector2Array(0, 0, 0, 0, 107653, 55406)
@@ -20,6 +22,9 @@ layer = -100
 script = ExtResource("1_p5p8c")
 backdrop_seed = 11211
 scenery_config = ExtResource("2_e7yt6")
+
+[node name="Painter" type="Node2D" parent="Backdrop"]
+script = ExtResource("10_painter")
 
 [node name="Enjoy" type="Sprite2D" parent="." unique_id=103323318]
 position = Vector2(245, -115)
