@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_sakqs"]
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="9_backdrop"]
 
+[ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="10_painter"]
+
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 _data = {
 "points": PackedVector2Array(0, 0, 0, 0, 23995, -89, 0, 0, 0, 0, 24128, 326, 0, 0, 0, 0, 23808, 27, 0, 0, 0, 0, 23840, 205, 0, 0, 0, 0, 24378, 48, 0, 0, 0, 0, 23647, 153, 0, 0, 0, 0, 14393, 249, 0, 0, 0, 0, 14260, 225, 0, 0, 0, 0, 13866, -166, 0, 0, 0, 0, 15630, 32)
@@ -18,6 +20,9 @@ point_count = 10
 layer = -100
 script = ExtResource("9_backdrop")
 backdrop_seed = 5505
+
+[node name="Painter" type="Node2D" parent="Backdrop"]
+script = ExtResource("10_painter")
 
 [node name="TwoJumps" type="Sprite2D" parent="." unique_id=1821169538]
 position = Vector2(305.0697, -95.625)
