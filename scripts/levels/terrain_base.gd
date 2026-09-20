@@ -41,6 +41,17 @@ extends StaticBody2D
 ## rather than a step it noses into.
 const EASE_SEGMENTS := 12
 
+## How far off the straight line between its neighbours a surface point has to
+## sit before it is worth keeping, in pixels. The profile is sampled once per
+## segment whether the ground is bending or not, so a long straight ramp arrives
+## as a row of points that all lie on the same line -- and a polygon made mostly
+## of those is what Godot's convex decomposition turns into zero-area slivers,
+## which then will not triangulate ("Invalid polygon data, triangulation
+## failed."). Dropping them costs nothing: a twentieth of a pixel is well under
+## what floating point noise moves a point by over a long descent, let alone
+## what anything in the game can see or drive on.
+const COLLINEAR_TOLERANCE := 0.05
+
 @export_group("Shape")
 @export_range(8.0, 256.0, 1.0) var segment_width := 48.0:
 	set(value):
@@ -261,6 +272,10 @@ func generate() -> void:
 	_surface = _build_surface()
 	_fill_bottom = _deepest_surface() + fill_depth
 	var pieces := _split_at_gaps(_surface)
+	# The polygons are built from the straightened pieces; _surface itself keeps
+	# its point per segment, because surface_point_at() indexes straight into it.
+	for i in pieces.size():
+		pieces[i] = _drop_collinear(pieces[i])
 	_clear_extra_pieces()
 	_apply_collision(pieces[0], get_node_or_null("Collision") as CollisionPolygon2D)
 	_apply_visuals(
@@ -314,6 +329,28 @@ func _split_at_gaps(surface: PackedVector2Array) -> Array[PackedVector2Array]:
 		push_warning("%s: gaps cover the whole track; ignoring them." % name)
 		pieces.append(surface)
 	return pieces
+
+
+## The same run of ground with the points that only repeat a straight line taken
+## out of it. The ends are always kept, so the piece still spans exactly what it
+## did and the fill still closes underneath the same two X positions.
+func _drop_collinear(points: PackedVector2Array) -> PackedVector2Array:
+	if points.size() < 3:
+		return points
+	var kept := PackedVector2Array()
+	kept.append(points[0])
+	for i in range(1, points.size() - 1):
+		# Measured from the last point kept rather than from the neighbour that was
+		# just dropped, so a run of points is straightened against the line it is
+		# actually being replaced by.
+		var from := kept[kept.size() - 1]
+		var span := points[i + 1] - from
+		var length := span.length()
+		if length > 0.0 and absf(span.cross(points[i] - from)) / length <= COLLINEAR_TOLERANCE:
+			continue
+		kept.append(points[i])
+	kept.append(points[points.size() - 1])
+	return kept
 
 
 func _is_gap(local_x: float) -> bool:

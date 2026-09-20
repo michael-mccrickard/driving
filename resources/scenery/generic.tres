@@ -8,5 +8,5 @@ script = ExtResource("1_scenery")
 distant_colour = Color(0.018773748, 0.14868426, 0.18728185, 1)
 distant_shape = ExtResource("2_shape")
 middle_colour = Color(0.084133185, 0.17430404, 0.20899746, 1)
-middle_height = 0.22999999999999998
+middle_height = 0.23
 middle_shape = ExtResource("2_shape")

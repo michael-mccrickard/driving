@@ -11,6 +11,7 @@
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 
 [node name="Cleveland" type="Node2D" unique_id=25114719]
+metadata/_edit_vertical_guides_ = [-7078.0]
 
 [node name="Backdrop" type="CanvasLayer" parent="." unique_id=837521026]
 layer = -100
