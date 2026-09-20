@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_terwu"]
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_l0ufj"]
-[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="2_mqicx"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic_scenery.tres" id="2_mqicx"]
 [ext_resource type="PackedScene" uid="uid://c8a2nurfau4ox" path="res://scenes/levels/high_hills.tscn" id="3_mqicx"]
 
 [resource]

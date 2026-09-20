@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="1_p5p8c"]
 [ext_resource type="Texture2D" uid="uid://dae11tua0vtxg" path="res://assets/sprites/enjoy.png" id="2_5lq4p"]
-[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic.tres" id="2_e7yt6"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic_scenery.tres" id="2_e7yt6"]
 [ext_resource type="Script" uid="uid://b38j02y8uvhfr" path="res://scripts/levels/terrain_author.gd" id="3_e7yt6"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_c2d7m"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_7uwsg"]
@@ -131,14 +131,14 @@ fill_colour = Color(0.14375854, 0.3393251, 0.38300171, 1)
 surface_colour = Color(0.7319699, 0.6198327, 0.30370858, 1)
 
 [node name="Collision" type="CollisionPolygon2D" parent="Terrain" unique_id=761641291]
-polygon = PackedVector2Array(0, 0, 48, 0, 96, 0, 144, 0, 192, 0, 240, 0, 288, 7.184803, 336, 27.712812, 384, 55.425625, 432, 75.953636, 480, 83.138435, 528, 83.138435, 576, 83.138435, 624, 83.138435, 672, 90.32324, 720, 110.85125, 768, 138.56406, 816, 159.09207, 864, 166.27687, 912, 166.27687, 960, 166.27687, 960, 57991.902, 0, 57991.902)
+polygon = PackedVector2Array(0, 0, 240, 0, 288, 7.184803, 336, 27.712812, 384, 55.425625, 432, 75.953636, 480, 83.138435, 624, 83.138435, 672, 90.32324, 720, 110.85125, 768, 138.56406, 816, 159.09207, 864, 166.27687, 960, 166.27687, 960, 57991.902, 0, 57991.902)
 
 [node name="Fill" type="Polygon2D" parent="Terrain" unique_id=1270329161]
 color = Color(0.14375854, 0.3393251, 0.38300171, 1)
-polygon = PackedVector2Array(0, 0, 48, 0, 96, 0, 144, 0, 192, 0, 240, 0, 288, 7.184803, 336, 27.712812, 384, 55.425625, 432, 75.953636, 480, 83.138435, 528, 83.138435, 576, 83.138435, 624, 83.138435, 672, 90.32324, 720, 110.85125, 768, 138.56406, 816, 159.09207, 864, 166.27687, 912, 166.27687, 960, 166.27687, 960, 57991.902, 0, 57991.902)
+polygon = PackedVector2Array(0, 0, 240, 0, 288, 7.184803, 336, 27.712812, 384, 55.425625, 432, 75.953636, 480, 83.138435, 624, 83.138435, 672, 90.32324, 720, 110.85125, 768, 138.56406, 816, 159.09207, 864, 166.27687, 960, 166.27687, 960, 57991.902, 0, 57991.902)
 
 [node name="Surface" type="Line2D" parent="Terrain" unique_id=965397278]
-points = PackedVector2Array(0, 0, 48, 0, 96, 0, 144, 0, 192, 0, 240, 0, 288, 7.184803, 336, 27.712812, 384, 55.425625, 432, 75.953636, 480, 83.138435, 528, 83.138435, 576, 83.138435, 624, 83.138435, 672, 90.32324, 720, 110.85125, 768, 138.56406, 816, 159.09207, 864, 166.27687, 912, 166.27687, 960, 166.27687)
+points = PackedVector2Array(0, 0, 240, 0, 288, 7.184803, 336, 27.712812, 384, 55.425625, 432, 75.953636, 480, 83.138435, 624, 83.138435, 672, 90.32324, 720, 110.85125, 768, 138.56406, 816, 159.09207, 864, 166.27687, 960, 166.27687)
 width = 7.0
 default_color = Color(0.7319699, 0.6198327, 0.30370858, 1)
 joint_mode = 2

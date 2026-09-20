@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="SceneryShapeConfig" format=3 uid="uid://g8iiu05rs7t0"]
+
+[ext_resource type="Script" uid="uid://uorqcbylsymo" path="res://scripts/levels/scenery_shape_config.gd" id="1_pveoh"]
+
+[resource]
+script = ExtResource("1_pveoh")
+scenery_seed = 2001

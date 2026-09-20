@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://d0vfkoneovm1j"]
 
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_1tamu"]
-[ext_resource type="Resource" uid="uid://bxw5k6nfgco25" path="res://resources/scenery/generic.tres" id="2_1g1ll"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic_scenery.tres" id="2_1g1ll"]
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_duepd"]
 [ext_resource type="PackedScene" uid="uid://bion2li12boph" path="res://scenes/levels/chilltown.tscn" id="3_1tamu"]
 

@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://ceaj3hdv2pg62"]
 
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_2hojv"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic_scenery.tres" id="2_ckjak"]
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_wja0j"]
 [ext_resource type="PackedScene" uid="uid://d3mrwf2h1lcc3" path="res://scenes/levels/boston.tscn" id="3_2hojv"]
-[ext_resource type="Resource" uid="uid://bxw5k6nfgco25" path="res://resources/scenery/generic.tres" id="4_scenery"]
 
 [resource]
 script = ExtResource("2_wja0j")
@@ -14,4 +14,4 @@ car = ExtResource("1_2hojv")
 burn_rate = 0.004
 max_speed_kmh = 80.0
 music = "track9.mp3"
-scenery_config = ExtResource("4_scenery")
+scenery_config = ExtResource("2_ckjak")
