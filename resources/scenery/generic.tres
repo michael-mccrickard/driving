@@ -1,13 +1,12 @@
-[gd_resource type="Resource" script_class="SceneryConfig" format=3]
+[gd_resource type="Resource" script_class="SceneryConfig" format=3 uid="uid://g6o2xfb5rx2j"]
 
-[ext_resource type="Script" path="res://scripts/levels/scenery_config.gd" id="1_scenery"]
-[ext_resource type="Resource" path="res://resources/scenery/generic_shape.tres" id="2_shape"]
+[ext_resource type="Script" uid="uid://cko5cwpnoggms" path="res://scripts/levels/scenery_config.gd" id="1_scenery"]
+[ext_resource type="Resource" uid="uid://dia2lrg6nscg2" path="res://resources/scenery/generic_shape.tres" id="2_shape"]
 
 [resource]
 script = ExtResource("1_scenery")
-ground = 0.56
-repeat_width = 1200.0
-distant_height = 0.38
+distant_colour = Color(0.018773748, 0.14868426, 0.18728185, 1)
 distant_shape = ExtResource("2_shape")
-middle_height = 0.28
+middle_colour = Color(0.084133185, 0.17430404, 0.20899746, 1)
+middle_height = 0.22999999999999998
 middle_shape = ExtResource("2_shape")

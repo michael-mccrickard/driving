@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://bork4i4hb5u20"]
 
 [ext_resource type="Script" uid="uid://qj3od5073hkv" path="res://scripts/levels/terrain_generator.gd" id="1_terrain"]
-[ext_resource type="Resource" path="res://resources/scenery/generic.tres" id="2_3iiwa"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic.tres" id="2_3iiwa"]
 [ext_resource type="Texture2D" uid="uid://dae11tua0vtxg" path="res://assets/sprites/enjoy.png" id="3_p1q3r"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_f65yb"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_8spva"]
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="9_backdrop"]
-[ext_resource type="Script" path="res://scripts/levels/backdrop_painter.gd" id="10_painter"]
+[ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="10_painter"]
 
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 
@@ -18,7 +18,7 @@ script = ExtResource("9_backdrop")
 backdrop_seed = 1101
 scenery_config = ExtResource("2_3iiwa")
 
-[node name="Painter" type="Node2D" parent="Backdrop"]
+[node name="Painter" type="Node2D" parent="Backdrop" unique_id=1061587643]
 script = ExtResource("10_painter")
 
 [node name="Terrain" type="StaticBody2D" parent="." unique_id=1086721745]

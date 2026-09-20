@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://d3mrwf2h1lcc3"]
 
 [ext_resource type="Script" uid="uid://qj3od5073hkv" path="res://scripts/levels/terrain_generator.gd" id="1_nmib3"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic.tres" id="2_67427"]
 [ext_resource type="Texture2D" uid="uid://dae11tua0vtxg" path="res://assets/sprites/enjoy.png" id="2_ko4ou"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_67427"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_b3w7h"]
@@ -14,6 +15,7 @@
 layer = -100
 script = ExtResource("9_backdrop")
 backdrop_seed = 9909
+scenery_config = ExtResource("2_67427")
 
 [node name="Enjoy" type="Sprite2D" parent="." unique_id=1954705756]
 position = Vector2(1002, -234)
