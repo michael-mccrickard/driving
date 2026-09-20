@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://du6k45b8wbl3o"]
 
 [ext_resource type="Script" uid="uid://qj3od5073hkv" path="res://scripts/levels/terrain_generator.gd" id="1_gx1c4"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic.tres" id="2_4n4me"]
 [ext_resource type="Texture2D" uid="uid://dme0c0n4lmtlp" path="res://assets/sprites/FourJumps.png" id="2_ry3wd"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_4n4me"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_8wkri"]
@@ -18,6 +19,7 @@ point_count = 15
 layer = -100
 script = ExtResource("9_backdrop")
 backdrop_seed = 7707
+scenery_config = ExtResource("2_4n4me")
 
 [node name="FourJumps" type="Sprite2D" parent="." unique_id=997137922]
 position = Vector2(1011, -169)

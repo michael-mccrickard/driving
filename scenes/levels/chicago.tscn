@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://qj3od5073hkv" path="res://scripts/levels/terrain_generator.gd" id="1_cu3t4"]
 [ext_resource type="Texture2D" uid="uid://c41dpyekj7esj" path="res://assets/sprites/TwoJumps.png" id="2_5acs1"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic.tres" id="2_sakqs"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_ah1g1"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_sakqs"]
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="9_backdrop"]
-
 [ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="10_painter"]
 
 [sub_resource type="Curve2D" id="Curve2D_edits"]
@@ -20,8 +20,9 @@ point_count = 10
 layer = -100
 script = ExtResource("9_backdrop")
 backdrop_seed = 5505
+scenery_config = ExtResource("2_sakqs")
 
-[node name="Painter" type="Node2D" parent="Backdrop"]
+[node name="Painter" type="Node2D" parent="Backdrop" unique_id=521990114]
 script = ExtResource("10_painter")
 
 [node name="TwoJumps" type="Sprite2D" parent="." unique_id=1821169538]
