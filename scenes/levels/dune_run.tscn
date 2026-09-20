@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_p8u2b"]
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="9_backdrop"]
 
+[ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="10_painter"]
+
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 
 [node name="DuneRun" type="Node2D" unique_id=1570398186]
@@ -16,6 +18,9 @@ layer = -100
 script = ExtResource("9_backdrop")
 backdrop_seed = 2202
 scenery_config = ExtResource("2_0h18u")
+
+[node name="Painter" type="Node2D" parent="Backdrop"]
+script = ExtResource("10_painter")
 
 [node name="Enjoy" type="Sprite2D" parent="." unique_id=140993875]
 position = Vector2(669, -231)
