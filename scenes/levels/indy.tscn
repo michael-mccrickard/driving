@@ -4,6 +4,7 @@
 [ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic.tres" id="2_c5bno"]
 [ext_resource type="Texture2D" uid="uid://7o70xbqqj0fc" path="res://assets/sprites/EightJumps.png" id="2_cp5cv"]
 [ext_resource type="Script" uid="uid://qj3od5073hkv" path="res://scripts/levels/terrain_generator.gd" id="3_0gn1h"]
+[ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="3_y0m8e"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_y0m8e"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_p1kqd"]
 
@@ -20,6 +21,9 @@ layer = -100
 script = ExtResource("1_cp5cv")
 backdrop_seed = 4404
 scenery_config = ExtResource("2_c5bno")
+
+[node name="Painter" type="Node2D" parent="Backdrop" unique_id=1372832265]
+script = ExtResource("3_y0m8e")
 
 [node name="Enjoy" type="Sprite2D" parent="." unique_id=1036863792]
 position = Vector2(818, 189)

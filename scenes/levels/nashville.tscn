@@ -6,12 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_q0x0f"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_xutpl"]
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="9_backdrop"]
-
 [ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="10_painter"]
 
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 
-[node name="TestTrack" type="Node2D" unique_id=2044806970]
+[node name="Nashville" type="Node2D" unique_id=2044806970]
 
 [node name="Backdrop" type="CanvasLayer" parent="." unique_id=1895937543]
 layer = -100
@@ -19,7 +18,7 @@ script = ExtResource("9_backdrop")
 backdrop_seed = 4404
 scenery_config = ExtResource("2_q0x0f")
 
-[node name="Painter" type="Node2D" parent="Backdrop"]
+[node name="Painter" type="Node2D" parent="Backdrop" unique_id=1471537803]
 script = ExtResource("10_painter")
 
 [node name="Enjoy" type="Sprite2D" parent="." unique_id=1036863792]

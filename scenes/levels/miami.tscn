@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://qj3od5073hkv" path="res://scripts/levels/terrain_generator.gd" id="1_g3ubq"]
 [ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic.tres" id="2_63d20"]
 [ext_resource type="Texture2D" uid="uid://db47u3vxxdhon" path="res://assets/sprites/ThreeJumps.png" id="2_e8u2r"]
+[ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="3_og4nr"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_63d20"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_og4nr"]
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="9_backdrop"]
@@ -13,13 +14,16 @@ _data = {
 }
 point_count = 42
 
-[node name="TestTrack" type="Node2D" unique_id=2044806970]
+[node name="Miami" type="Node2D" unique_id=2044806970]
 
 [node name="Backdrop" type="CanvasLayer" parent="." unique_id=158891476]
 layer = -100
 script = ExtResource("9_backdrop")
 backdrop_seed = 8808
 scenery_config = ExtResource("2_63d20")
+
+[node name="Painter" type="Node2D" parent="Backdrop" unique_id=1120087783]
+script = ExtResource("3_og4nr")
 
 [node name="ThreeJumps" type="Sprite2D" parent="." unique_id=1571788812]
 position = Vector2(568, -167)
