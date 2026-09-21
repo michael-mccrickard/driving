@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://dau8s06m6jf32"]
 
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="1_config"]
-[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/green_scenery.tres" id="2_t1os1"]
 [ext_resource type="PackedScene" uid="uid://bork4i4hb5u20" path="res://scenes/levels/hills.tscn" id="2_track"]
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="3_car"]
 
@@ -13,4 +12,3 @@ track = ExtResource("2_track")
 car = ExtResource("3_car")
 burn_rate = 0.004
 max_speed_kmh = 80.0
-scenery_config = ExtResource("2_t1os1")
