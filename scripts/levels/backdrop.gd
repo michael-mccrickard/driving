@@ -185,14 +185,29 @@ func _paint_scenery_band(
 		points.append(Vector2(x, ground))
 
 		var count = max(3, shape_config.points)
+		var peak := rng.randf_range(shape_config.peak_min, shape_config.peak_max)
+		var width := rng.randf_range(shape_config.width_min, shape_config.width_max)
+		var peak_height_multiplier := rng.randf_range(
+			shape_config.height_min,
+			shape_config.height_max
+		)
+		var max_slope := tan(deg_to_rad(shape_config.max_slope_degrees))
+
+		# A rounded cosine peak has a known maximum slope. Widen the peak as
+		# necessary so its steepest edge cannot exceed the configured limit.
+		var minimum_width := (
+			height * peak_height_multiplier * PI
+			/ (2.0 * max_slope * repeat_width)
+		)
+		width = maxf(width, minimum_width)
+
 		for i in count:
 			var t := float(i) / float(count - 1)
 			var px = x + t * repeat_width
-			var peak := rng.randf_range(shape_config.peak_min, shape_config.peak_max)
-			var width := rng.randf_range(shape_config.width_min, shape_config.width_max)
 			var distance := absf(t - peak) / width
-			var shape := maxf(0.0, 1.0 - distance)
-			var y := ground - height * shape * rng.randf_range(shape_config.height_min, shape_config.height_max)
+			var normalized_distance := minf(distance, 1.0)
+			var shape := 0.5 + 0.5 * cos(PI * normalized_distance)
+			var y := ground - height * shape * peak_height_multiplier
 			points.append(Vector2(px, y))
 
 		points.append(Vector2(x + repeat_width, ground))
