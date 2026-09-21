@@ -35,8 +35,6 @@ extends Resource
 @export var music := "default.mp3"
 
 @export_group("Parallax Scenery")
-## Procedural scenery recipe for this level.
-@export var scenery_config: SceneryConfig
 ## Multiplies the scenery parallax rates for this level. 1.0 is the normal
 ## speed; values below 1.0 slow the scenery without changing the depth spacing.
 @export_range(0.0, 2.0, 0.05) var parallax_speed_multiplier := 1.0
