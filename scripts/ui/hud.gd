@@ -212,6 +212,13 @@ func set_levels(names: PackedStringArray) -> void:
 ## Which level's numbers are on screen: names it in the readout and marks it in
 ## the menu. The record is per level, so without this the best line would
 ## silently change meaning on the way to the next one.
+## Shows or hides NEXT without changing the level menu itself.
+func set_next_visible(visible: bool) -> void:
+	_next_button.visible = visible
+	if not visible:
+		_level_menu.visible = false
+
+
 func set_current_level(index: int) -> void:
 	_current_level = index
 	if index >= 0 and index < _level_names.size():
