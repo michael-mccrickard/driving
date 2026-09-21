@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SceneryShapeConfig" format=3 uid="uid://qxtogt3w84kg"]
+
+[ext_resource type="Script" uid="uid://uorqcbylsymo" path="res://scripts/levels/scenery_shape_config.gd" id="1_m56kk"]
+
+[resource]
+script = ExtResource("1_m56kk")
+scenery_seed = 4321
+peak_max = 0.9199999999999999
+width_min = 0.18
+width_max = 0.33999999999999997

@@ -5,3 +5,7 @@
 [resource]
 script = ExtResource("1_pveoh")
 scenery_seed = 2001
+peak_max = 0.7
+width_min = 0.21000000000000002
+height_min = 0.45999999999999996
+height_max = 0.7999999999999999

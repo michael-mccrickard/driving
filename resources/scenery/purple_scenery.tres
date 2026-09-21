@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SceneryConfig" format=3 uid="uid://b2dj5h5cl5xy3"]
+
+[ext_resource type="Resource" uid="uid://qxtogt3w84kg" path="res://resources/scenery/hilly_shape.tres" id="1_07vk3"]
+[ext_resource type="Script" uid="uid://cko5cwpnoggms" path="res://scripts/levels/scenery_config.gd" id="2_mgorg"]
+
+[resource]
+script = ExtResource("2_mgorg")
+distant_colour = Color(0.15128079, 0.115604065, 0.21074557, 1)
+distant_shape = ExtResource("1_07vk3")
+middle_colour = Color(0.19032326, 0.13322255, 0.32568505, 1)
+middle_height = 0.23
+middle_shape = ExtResource("1_07vk3")
