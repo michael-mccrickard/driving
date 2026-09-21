@@ -4,3 +4,4 @@
 
 [resource]
 script = ExtResource("1_shape")
+scenery_seed = 4321

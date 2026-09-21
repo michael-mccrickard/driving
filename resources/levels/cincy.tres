@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_0smtw"]
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_2scwe"]
-[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic_scenery.tres" id="2_5snoi"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/green_scenery.tres" id="2_5snoi"]
 [ext_resource type="PackedScene" uid="uid://c21vps3d6hbym" path="res://scenes/levels/cincy.tscn" id="3_0smtw"]
 
 [resource]

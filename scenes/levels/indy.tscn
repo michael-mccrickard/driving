@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dg8i3d324i55x"]
 
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="1_cp5cv"]
-[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic_scenery.tres" id="2_c5bno"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/green_scenery.tres" id="2_c5bno"]
 [ext_resource type="Texture2D" uid="uid://7o70xbqqj0fc" path="res://assets/sprites/EightJumps.png" id="2_cp5cv"]
 [ext_resource type="Script" uid="uid://qj3od5073hkv" path="res://scripts/levels/terrain_generator.gd" id="3_0gn1h"]
 [ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="3_y0m8e"]

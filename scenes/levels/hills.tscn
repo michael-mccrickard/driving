@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bork4i4hb5u20"]
 
 [ext_resource type="Script" uid="uid://qj3od5073hkv" path="res://scripts/levels/terrain_generator.gd" id="1_terrain"]
-[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic_scenery.tres" id="2_3iiwa"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/green_scenery.tres" id="2_3iiwa"]
 [ext_resource type="Texture2D" uid="uid://dae11tua0vtxg" path="res://assets/sprites/enjoy.png" id="3_p1q3r"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_f65yb"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_8spva"]

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://pixlje4msx84"]
 
 [ext_resource type="Script" uid="uid://qj3od5073hkv" path="res://scripts/levels/terrain_generator.gd" id="1_g3ubq"]
-[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic_scenery.tres" id="2_63d20"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/green_scenery.tres" id="2_63d20"]
 [ext_resource type="Texture2D" uid="uid://db47u3vxxdhon" path="res://assets/sprites/ThreeJumps.png" id="2_e8u2r"]
 [ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="3_og4nr"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_63d20"]

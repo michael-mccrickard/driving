@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="1_p2shq"]
 [ext_resource type="Script" uid="uid://qj3od5073hkv" path="res://scripts/levels/terrain_generator.gd" id="2_8xb0e"]
-[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/generic_scenery.tres" id="2_p4jxo"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/green_scenery.tres" id="2_p4jxo"]
 [ext_resource type="Texture2D" uid="uid://c41dpyekj7esj" path="res://assets/sprites/TwoJumps.png" id="3_p4jxo"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_jdr4w"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_v7nw4"]
