@@ -170,9 +170,6 @@ func load_level(index: int) -> void:
 	var track := config.track.instantiate()
 	track.name = "Level"
 	add_child(track)
-	var backdrop := track.get_node_or_null("Backdrop") as Backdrop
-	if backdrop != null and config.scenery_config != null:
-		backdrop.scenery_config = config.scenery_config
 	# Taken before the terrain check below can bail out, so that no failed load
 	# leaves the post of the level just torn down behind. Not every track need
 	# have one, so this is allowed to come back null; it is only ever a flag to
