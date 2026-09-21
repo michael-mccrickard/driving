@@ -108,6 +108,8 @@ var _finish_distance := 0.0
 ## Fuel bill of a run that has reached the cliff, held until the restart. A run
 ## can legitimately finish having spent 0.0, so this needs a sentinel of its own.
 var _pending_fuel_used := NO_PENDING
+## Whether this run has actually begun moving. Used only for the NEXT button.
+var _run_started := false
 
 
 func _ready() -> void:
@@ -177,6 +179,8 @@ func load_level(index: int) -> void:
 	_finish_sprite = track.get_node_or_null("Finish") as Sprite2D
 	_finish_texture = _finish_sprite.texture if _finish_sprite != null else null
 	_terrain = track.get_node_or_null("Terrain") as TerrainBase
+	if _terrain != null:
+		_terrain.visible = true
 	if _terrain == null:
 		push_error(
 			"Level %s has no terrain: Terrain must be a TerrainGenerator or a TerrainAuthor."
@@ -211,6 +215,8 @@ func load_level(index: int) -> void:
 	_camera.reset_smoothing()
 
 	_hud.set_current_level(_level_index)
+	_run_started = false
+	_hud.set_next_visible(true)
 	# The level names the track; the field is where it can be overridden by hand.
 	_hud.set_music_track(config.music)
 	_music.set_track(config.music)
@@ -287,6 +293,10 @@ func _process(delta: float) -> void:
 	_hud.set_fuel(_car.get_fuel(), used, _car.get_fuel_fraction())
 	_hud.set_tuning(_car.get_burn_rate(), _car.get_max_speed_kmh())
 
+	if not has_pending_run() and not _run_started and _car.get_speed() > 0.1:
+		_run_started = true
+		_hud.set_next_visible(false)
+
 	if not has_pending_run() and _car.get_front_x() > _finish_x:
 		_finish_run()
 
@@ -334,6 +344,7 @@ func has_pending_run() -> bool:
 ## once -- there is no fanfare to wait out.
 func _finish_run() -> void:
 	_pending_fuel_used = _car.get_fuel_used()
+	_hud.set_next_visible(true)
 	_finish_distance = _distance_travelled()
 	var record := GameState.beats_record(_pending_fuel_used)
 	_music.end_run()
@@ -408,6 +419,8 @@ func _fail_run() -> void:
 
 func _restart_run() -> void:
 	_bank_pending_run()
+	_run_started = false
+	_hud.set_next_visible(true)
 	_stuck_time = 0.0
 	_top_speed_kmh = 0.0
 	_wall_hit = false
