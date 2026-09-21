@@ -45,3 +45,8 @@ extends Resource
 	set(value):
 		height_max = value
 		emit_changed()
+## Maximum allowed slope of a generated scenery edge, expressed as an angle from horizontal.
+@export_range(20.0, 70.0, 1.0, "suffix:°") var max_slope_degrees := 50.0:
+	set(value):
+		max_slope_degrees = value
+		emit_changed()
