@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SceneryConfig" format=3 uid="uid://dyhaoay44as5i"]
+
+[ext_resource type="Resource" uid="uid://bpcyvs7i0emlf" path="res://resources/scenery/dune2_shape.tres" id="1_nu7bi"]
+[ext_resource type="Script" uid="uid://cko5cwpnoggms" path="res://scripts/levels/scenery_config.gd" id="2_cyk1o"]
+
+[resource]
+script = ExtResource("2_cyk1o")
+distant_colour = Color(0.27761212, 0.008063958, 0.0037258735, 1)
+distant_shape = ExtResource("1_nu7bi")
+middle_colour = Color(0.33468965, 0.129585, 0.06811985, 1)
+middle_height = 0.23
+middle_shape = ExtResource("1_nu7bi")

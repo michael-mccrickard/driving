@@ -25,7 +25,7 @@ scenery_config = ExtResource("2_iv25p")
 [node name="Painter" type="Node2D" parent="Backdrop" unique_id=1803272430]
 script = ExtResource("3_fi3fm")
 
-[node name="FourJumps" type="Sprite2D" parent="." unique_id=997137922]
+[node name="SixJumps" type="Sprite2D" parent="." unique_id=997137922]
 position = Vector2(607.00006, -249)
 scale = Vector2(0.69768214, 0.6810345)
 texture = ExtResource("2_hkfad")

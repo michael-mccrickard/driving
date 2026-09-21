@@ -27,7 +27,6 @@ position = Vector2(907, -189)
 texture = ExtResource("2_4qv0i")
 
 [node name="Terrain" type="StaticBody2D" parent="." unique_id=318168794]
-visible = false
 collision_mask = 0
 script = ExtResource("3_4ueut")
 shape_text = "flat 1000

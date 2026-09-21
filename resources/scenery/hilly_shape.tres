@@ -4,7 +4,8 @@
 
 [resource]
 script = ExtResource("1_m56kk")
-scenery_seed = 69
-peak_max = 0.9199999999999999
+scenery_seed = 969
+peak_max = 0.88
 width_min = 0.18
-width_max = 0.33999999999999997
+width_max = 0.27
+height_min = 0.58
