@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_qrwqu"]
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_27t0r"]
-[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/green_scenery.tres" id="2_y4f2t"]
 [ext_resource type="PackedScene" uid="uid://bion2li12boph" path="res://scenes/levels/chilltown.tscn" id="3_qrwqu"]
 
 [resource]
@@ -14,4 +13,3 @@ car = ExtResource("1_qrwqu")
 burn_rate = 0.004
 max_speed_kmh = 80.0
 music = "track4.mp3"
-scenery_config = ExtResource("2_y4f2t")
