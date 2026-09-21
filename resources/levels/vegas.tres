@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://cr7f6aat852m8" path="res://scenes/vehicles/car.tscn" id="1_rabxo"]
 [ext_resource type="Script" uid="uid://cd5a2dtjy0n1t" path="res://scripts/levels/level_config.gd" id="2_43fes"]
-[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/green_scenery.tres" id="2_ofrcy"]
 [ext_resource type="PackedScene" uid="uid://ck127ivk67gdk" path="res://scenes/levels/vegas.tscn" id="3_rabxo"]
 
 [resource]
@@ -14,4 +13,3 @@ car = ExtResource("1_rabxo")
 burn_rate = 0.004
 max_speed_kmh = 80.0
 music = "track15.mp3"
-scenery_config = ExtResource("2_ofrcy")
