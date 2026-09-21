@@ -22,7 +22,6 @@ scenery_config = ExtResource("2_p4jxo")
 script = ExtResource("10_painter")
 
 [node name="Terrain" type="StaticBody2D" parent="." unique_id=644870424]
-visible = false
 collision_mask = 0
 script = ExtResource("2_8xb0e")
 segment_count = 600

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="1_4qv0i"]
 [ext_resource type="Texture2D" uid="uid://7o70xbqqj0fc" path="res://assets/sprites/EightJumps.png" id="2_4qv0i"]
-[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/green_scenery.tres" id="2_npu8g"]
+[ext_resource type="Resource" uid="uid://b01rihqh1bmig" path="res://resources/scenery/brown_scenery.tres" id="2_4ueut"]
 [ext_resource type="Script" uid="uid://b38j02y8uvhfr" path="res://scripts/levels/terrain_author.gd" id="3_4ueut"]
 [ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="3_hd12p"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_hd12p"]
@@ -17,7 +17,7 @@ metadata/_edit_vertical_guides_ = [-7078.0]
 layer = -100
 script = ExtResource("1_4qv0i")
 backdrop_seed = 11211
-scenery_config = ExtResource("2_npu8g")
+scenery_config = ExtResource("2_4ueut")
 
 [node name="Painter" type="Node2D" parent="Backdrop" unique_id=971304207]
 script = ExtResource("3_hd12p")
@@ -27,6 +27,7 @@ position = Vector2(907, -189)
 texture = ExtResource("2_4qv0i")
 
 [node name="Terrain" type="StaticBody2D" parent="." unique_id=318168794]
+visible = false
 collision_mask = 0
 script = ExtResource("3_4ueut")
 shape_text = "flat 1000
