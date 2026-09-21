@@ -293,7 +293,11 @@ func _process(delta: float) -> void:
 	_hud.set_fuel(_car.get_fuel(), used, _car.get_fuel_fraction())
 	_hud.set_tuning(_car.get_burn_rate(), _car.get_max_speed_kmh())
 
-	if not has_pending_run() and not _run_started and _car.get_speed() > 0.1:
+	# Do not hide NEXT merely because the car starts rolling. A level can
+	# move slightly from gravity or physics settling while the player is still
+	# deciding what to do. The run is considered started when the player actually
+	# presses the accelerator (throttle).
+	if not has_pending_run() and not _run_started and Input.get_action_strength("throttle") > 0.0:
 		_run_started = true
 		_hud.set_next_visible(false)
 
