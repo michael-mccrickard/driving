@@ -28,6 +28,7 @@ signal level_selected(index: int)
 ## for the same reason the mode is: main.gd owns the MusicPlayer that acts on it.
 signal music_track_set(track: String)
 signal music_enabled_set(enabled: bool)
+signal mode_changed(authoring: bool)
 
 ## AUTHOR is the tuning sandbox: every field on show and editable, including the
 ## music track and the record wipe. PLAY is the game as played -- the knobs that
@@ -167,6 +168,11 @@ func set_mode(new_mode: Mode) -> void:
 	# swaps rather than vanishes -- a track name to author with, a switch to play
 	# with.
 	_music_toggle.visible = not authoring
+	mode_changed.emit(authoring)
+
+
+func is_author_mode() -> bool:
+	return mode == Mode.AUTHOR
 
 
 func toggle_mode() -> void:
