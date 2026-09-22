@@ -10,9 +10,9 @@
 
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 107653, 55406)
+"points": PackedVector2Array(0, 0, 0, 0, 107653, 55406, 0, 0, 0, 0, 80991, 41642)
 }
-point_count = 1
+point_count = 2
 
 [node name="Cincy" type="Node2D" unique_id=25114719]
 

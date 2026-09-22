@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://38qib3e2awh1"]
 
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="1_w3qwo"]
-[ext_resource type="Resource" uid="uid://dyhaoay44as5i" path="res://resources/scenery/red_scenery.tres" id="2_wwkn1"]
+[ext_resource type="Resource" uid="uid://7issp50wequu" path="res://resources/scenery/yellow_scenery.tres" id="2_w3qwo"]
 [ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="3_l2hf1"]
 [ext_resource type="Texture2D" uid="uid://dae11tua0vtxg" path="res://assets/sprites/enjoy.png" id="4_dyptq"]
 [ext_resource type="Script" uid="uid://b38j02y8uvhfr" path="res://scripts/levels/terrain_author.gd" id="5_qn6w1"]
@@ -14,13 +14,13 @@ _data = {
 }
 point_count = 1
 
-[node name="Cincy" type="Node2D" unique_id=25114719]
+[node name="Upward" type="Node2D" unique_id=25114719]
 
 [node name="Backdrop" type="CanvasLayer" parent="." unique_id=837521026]
 layer = -100
 script = ExtResource("1_w3qwo")
 backdrop_seed = 11211
-scenery_config = ExtResource("2_wwkn1")
+scenery_config = ExtResource("2_w3qwo")
 
 [node name="Painter" type="Node2D" parent="Backdrop" unique_id=2054979036]
 script = ExtResource("3_l2hf1")
@@ -31,6 +31,7 @@ scale = Vector2(0.55419356, 0.66818184)
 texture = ExtResource("4_dyptq")
 
 [node name="Terrain" type="StaticBody2D" parent="." unique_id=318168794]
+visible = false
 collision_mask = 0
 script = ExtResource("5_qn6w1")
 shape_text = "#Shortest downhill
@@ -81,20 +82,20 @@ corner_blend = 360.0
 gaps = PackedVector2Array(1700, 150, 6200, 600, 16000, 1000, 32800, 1300, 58500, 1400)
 gap_ramp_height = 0.0
 gap_ramp_length = 48.0
-fill_colour = Color(0.14375854, 0.3393251, 0.38300171, 1)
-surface_colour = Color(0.7319699, 0.6198327, 0.30370858, 1)
+fill_colour = Color(0.118296675, 0.0874, 0.23, 1)
+surface_colour = Color(0.37826172, 0.29930001, 0.73, 1)
 
 [node name="Collision" type="CollisionPolygon2D" parent="Terrain" unique_id=761641291]
 polygon = PackedVector2Array(0, 0, 144, 0, 192, 0.5452753, 240, 4.875402, 288, 15.299782, 336, 32.588215, 384, 55.9709, 432, 83.138435, 1440, 665.1075, 1488, 688.4902, 1536, 692.8203, 1584, 687.5687, 1680, 630.8519, 1680, 35608.637, 0, 35608.637)
 
 [node name="Fill" type="Polygon2D" parent="Terrain" unique_id=1270329161]
-color = Color(0.14375854, 0.3393251, 0.38300171, 1)
+color = Color(0.118296675, 0.0874, 0.23, 1)
 polygon = PackedVector2Array(0, 0, 144, 0, 192, 0.5452753, 240, 4.875402, 288, 15.299782, 336, 32.588215, 384, 55.9709, 432, 83.138435, 1440, 665.1075, 1488, 688.4902, 1536, 692.8203, 1584, 687.5687, 1680, 630.8519, 1680, 35608.637, 0, 35608.637)
 
 [node name="Surface" type="Line2D" parent="Terrain" unique_id=965397278]
 points = PackedVector2Array(0, 0, 144, 0, 192, 0.5452753, 240, 4.875402, 288, 15.299782, 336, 32.588215, 384, 55.9709, 432, 83.138435, 1440, 665.1075, 1488, 688.4902, 1536, 692.8203, 1584, 687.5687, 1680, 630.8519)
 width = 7.0
-default_color = Color(0.7319699, 0.6198327, 0.30370858, 1)
+default_color = Color(0.37826172, 0.29930001, 0.73, 1)
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
