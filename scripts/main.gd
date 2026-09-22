@@ -131,6 +131,7 @@ func _ready() -> void:
 	_hud.level_selected.connect(jump_to_level)
 	_hud.music_track_set.connect(_music.set_track)
 	_hud.music_enabled_set.connect(_music.set_enabled)
+	_hud.mode_changed.connect(_on_hud_mode_changed)
 	_music.set_enabled(_hud.is_music_enabled())
 
 	load_level(0)
@@ -216,6 +217,8 @@ func load_level(index: int) -> void:
 	_camera.reset_smoothing()
 
 	_hud.set_current_level(_level_index)
+	if _terrain != null:
+		_terrain.set_author_mode(_hud.is_author_mode())
 	_run_started = false
 	_hud.set_next_visible(true)
 	# The level names the track; the field is where it can be overridden by hand.
@@ -465,3 +468,8 @@ func _fly_flag(texture: Texture2D) -> void:
 	if _finish_sprite == null:
 		return
 	_finish_sprite.texture = texture
+
+
+func _on_hud_mode_changed(authoring: bool) -> void:
+	if _terrain != null:
+		_terrain.set_author_mode(authoring)
