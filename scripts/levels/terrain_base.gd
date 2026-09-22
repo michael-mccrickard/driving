@@ -169,6 +169,14 @@ var _edits: Path2D
 # standing.
 var _extra_pieces: Array[Node] = []
 
+var _gap_label_layer: CanvasLayer
+var _gap_labels: Array[Label] = []
+var _author_mode := false
+
+const GAP_LABEL_FONT_SIZE := 48
+const GAP_LABEL_SCREEN_Y_FRACTION := 0.333
+const GAP_LABEL_WIDTH := 120.0
+
 
 # --- What a subclass supplies -------------------------------------------------
 
@@ -285,6 +293,7 @@ func generate() -> void:
 		_build_extra_piece(pieces[i])
 	_build_end_wall()
 	_build_finish_marker()
+	_build_gap_labels()
 	# The wall's paint is this node's own rather than a child's, so a rebuild has
 	# to ask for the repaint that puts it back.
 	queue_redraw()
@@ -569,3 +578,59 @@ func _apply_visuals(surface: PackedVector2Array, fill: Polygon2D, line: Line2D) 
 func _request_rebuild() -> void:
 	if is_node_ready():
 		generate()
+
+
+func set_author_mode(authoring: bool) -> void:
+	_author_mode = authoring
+	if _author_mode:
+		_build_gap_labels()
+	else:
+		_clear_gap_labels()
+
+
+func _build_gap_labels() -> void:
+	_clear_gap_labels()
+	if not _author_mode or gaps.is_empty():
+		return
+	if _gap_label_layer == null:
+		_gap_label_layer = CanvasLayer.new()
+		_gap_label_layer.name = "GapLabels"
+		_gap_label_layer.layer = 100
+		add_child(_gap_label_layer)
+	for i in gaps.size():
+		var label := Label.new()
+		label.text = "G%d" % i
+		label.add_theme_font_size_override("font_size", GAP_LABEL_FONT_SIZE)
+		label.add_theme_color_override("font_color", Color.WHITE)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		label.size = Vector2(GAP_LABEL_WIDTH, GAP_LABEL_FONT_SIZE + 12.0)
+		_gap_label_layer.add_child(label)
+		_gap_labels.append(label)
+	_update_gap_labels()
+
+
+func _clear_gap_labels() -> void:
+	for label in _gap_labels:
+		if is_instance_valid(label):
+			label.free()
+	_gap_labels.clear()
+
+
+func _process(_delta: float) -> void:
+	if _author_mode and not _gap_labels.is_empty():
+		_update_gap_labels()
+
+
+func _update_gap_labels() -> void:
+	if _gap_labels.is_empty():
+		return
+	var viewport_size := get_viewport_rect().size
+	var screen_y := viewport_size.y * GAP_LABEL_SCREEN_Y_FRACTION
+	var canvas_transform := get_viewport().get_canvas_transform()
+	for i in mini(_gap_labels.size(), gaps.size()):
+		var gap := gaps[i]
+		var center := to_global(Vector2(gap.x + gap.y * 0.5, 0.0))
+		var screen_position := canvas_transform * center
+		var label := _gap_labels[i]
+		label.position = Vector2(screen_position.x - GAP_LABEL_WIDTH * 0.5, screen_y)
