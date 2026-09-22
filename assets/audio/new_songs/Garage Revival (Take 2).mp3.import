@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bbcfgq7erwm13"
+path="res://.godot/imported/Garage Revival (Take 2).mp3-5f7c72158a917a9b9eeca09264894efc.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/new_songs/Garage Revival (Take 2).mp3"
+dest_files=["res://.godot/imported/Garage Revival (Take 2).mp3-5f7c72158a917a9b9eeca09264894efc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

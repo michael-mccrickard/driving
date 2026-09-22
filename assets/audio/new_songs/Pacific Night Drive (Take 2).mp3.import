@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cu5k8i54d88p4"
+path="res://.godot/imported/Pacific Night Drive (Take 2).mp3-968eb2dc773d7cab2a70a41f7331d12e.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/new_songs/Pacific Night Drive (Take 2).mp3"
+dest_files=["res://.godot/imported/Pacific Night Drive (Take 2).mp3-968eb2dc773d7cab2a70a41f7331d12e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

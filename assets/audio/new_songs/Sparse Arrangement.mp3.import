@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://chldsb130k7eg"
+path="res://.godot/imported/Sparse Arrangement.mp3-38d3b8e7376ca9bcf7d8a0f63b40b2b0.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/new_songs/Sparse Arrangement.mp3"
+dest_files=["res://.godot/imported/Sparse Arrangement.mp3-38d3b8e7376ca9bcf7d8a0f63b40b2b0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

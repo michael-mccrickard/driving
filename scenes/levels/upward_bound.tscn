@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://38qib3e2awh1"]
+
+[ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="1_w3qwo"]
+[ext_resource type="Resource" uid="uid://dyhaoay44as5i" path="res://resources/scenery/red_scenery.tres" id="2_wwkn1"]
+[ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="3_l2hf1"]
+[ext_resource type="Texture2D" uid="uid://dae11tua0vtxg" path="res://assets/sprites/enjoy.png" id="4_dyptq"]
+[ext_resource type="Script" uid="uid://b38j02y8uvhfr" path="res://scripts/levels/terrain_author.gd" id="5_qn6w1"]
+[ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="6_0t3oy"]
+[ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="7_n3cdu"]
+
+[sub_resource type="Curve2D" id="Curve2D_edits"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 107653, 55406)
+}
+point_count = 1
+
+[node name="Cincy" type="Node2D" unique_id=25114719]
+
+[node name="Backdrop" type="CanvasLayer" parent="." unique_id=837521026]
+layer = -100
+script = ExtResource("1_w3qwo")
+backdrop_seed = 11211
+scenery_config = ExtResource("2_wwkn1")
+
+[node name="Painter" type="Node2D" parent="Backdrop" unique_id=2054979036]
+script = ExtResource("3_l2hf1")
+
+[node name="Enjoy" type="Sprite2D" parent="." unique_id=103323318]
+position = Vector2(245, -115)
+scale = Vector2(0.55419356, 0.66818184)
+texture = ExtResource("4_dyptq")
+
+[node name="Terrain" type="StaticBody2D" parent="." unique_id=318168794]
+collision_mask = 0
+script = ExtResource("5_qn6w1")
+shape_text = "#Shortest downhill
+down 1200 30
+flat 50
+up 70 35
+#gap 1
+flat 500
+#big downhill 1
+down 3600 35
+#next 4 are launching ramp
+flat 100
+up 50 35
+flat 50
+down 50
+#gap 2
+flat 2000 -2900
+#big downhill 2    
+down 7200 35
+#next 4 are launching ramp
+flat 300
+up 100 35
+flat 100
+down 50
+#gap 3
+flat 2000 -7500
+#big downhill 3    
+down 14000 35
+#next 4 are launching ramp
+flat 200
+up 200 35
+flat 50
+down 50
+#gap 4
+flat 5000 -17000
+#big downhill 4    
+down 20000 39
+#next 4 are launching ramp
+flat 300
+up 200 35
+flat 50
+down 50
+#gap 4
+flat 3000 -33000
+"
+shapes = PackedVector3Array(0, 200, 0, 1, 100, 14, 0, 150, 0, 1, 100, 18, 1, 100, 24, 1, 100, 28, 1, 100, 12, 0, 100, 0, 1, 100, 18, 1, 100, 24, 1, 100, 24, 1, 100, 16, 0, 100, 0, 2, 100, 14, 1, 100, 22, 2, 1200, 22, 0, 800, 0, 1, 1800, 18, 2, 1400, 16, 1, 800, 20, 0, 600, 0, 2, 1000, 12, 1, 1000, 18)
+corner_blend = 360.0
+gaps = PackedVector2Array(1700, 150, 6200, 600, 16000, 1000, 32500, 1300, 58500, 1200)
+gap_ramp_height = 0.0
+gap_ramp_length = 48.0
+fill_colour = Color(0.14375854, 0.3393251, 0.38300171, 1)
+surface_colour = Color(0.7319699, 0.6198327, 0.30370858, 1)
+
+[node name="Collision" type="CollisionPolygon2D" parent="Terrain" unique_id=761641291]
+polygon = PackedVector2Array(0, 0, 144, 0, 192, 0.5452753, 240, 4.875402, 288, 15.299782, 336, 32.588215, 384, 55.9709, 432, 83.138435, 1440, 665.1075, 1488, 688.4902, 1536, 692.8203, 1584, 687.5687, 1680, 630.8519, 1680, 35608.637, 0, 35608.637)
+
+[node name="Fill" type="Polygon2D" parent="Terrain" unique_id=1270329161]
+color = Color(0.14375854, 0.3393251, 0.38300171, 1)
+polygon = PackedVector2Array(0, 0, 144, 0, 192, 0.5452753, 240, 4.875402, 288, 15.299782, 336, 32.588215, 384, 55.9709, 432, 83.138435, 1440, 665.1075, 1488, 688.4902, 1536, 692.8203, 1584, 687.5687, 1680, 630.8519, 1680, 35608.637, 0, 35608.637)
+
+[node name="Surface" type="Line2D" parent="Terrain" unique_id=965397278]
+points = PackedVector2Array(0, 0, 144, 0, 192, 0.5452753, 240, 4.875402, 288, 15.299782, 336, 32.588215, 384, 55.9709, 432, 83.138435, 1440, 665.1075, 1488, 688.4902, 1536, 692.8203, 1584, 687.5687, 1680, 630.8519)
+width = 7.0
+default_color = Color(0.7319699, 0.6198327, 0.30370858, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Edits" type="Path2D" parent="Terrain" unique_id=948202970]
+curve = SubResource("Curve2D_edits")
+
+[node name="Finish" type="Sprite2D" parent="." unique_id=2020954178]
+position = Vector2(61464, 16231)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("6_0t3oy")
+
+[node name="Wall" type="Sprite2D" parent="." unique_id=378623486]
+position = Vector2(61904, 16238)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("7_n3cdu")

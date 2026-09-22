@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="1_4qv0i"]
 [ext_resource type="Texture2D" uid="uid://7o70xbqqj0fc" path="res://assets/sprites/EightJumps.png" id="2_4qv0i"]
-[ext_resource type="Resource" uid="uid://b01rihqh1bmig" path="res://resources/scenery/brown_scenery.tres" id="2_4ueut"]
+[ext_resource type="Resource" uid="uid://g6o2xfb5rx2j" path="res://resources/scenery/green_scenery.tres" id="2_npu8g"]
 [ext_resource type="Script" uid="uid://b38j02y8uvhfr" path="res://scripts/levels/terrain_author.gd" id="3_4ueut"]
 [ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="3_hd12p"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_hd12p"]
@@ -17,7 +17,7 @@ metadata/_edit_vertical_guides_ = [-7078.0]
 layer = -100
 script = ExtResource("1_4qv0i")
 backdrop_seed = 11211
-scenery_config = ExtResource("2_4ueut")
+scenery_config = ExtResource("2_npu8g")
 
 [node name="Painter" type="Node2D" parent="Backdrop" unique_id=971304207]
 script = ExtResource("3_hd12p")
@@ -59,14 +59,14 @@ corner_blend = 360.0
 gaps = PackedVector2Array(7300, 500, 15000, 500, 23000, 150, 26000, 150, 29000, 150, 33000, 150, 38000, 200, 0, 0)
 gap_ramp_height = 0.0
 gap_ramp_length = 48.0
-fill_colour = Color(0.83, 0.37682003, 0.13280001, 1)
+fill_colour = Color(0.46, 0.20884003, 0.07360002, 1)
 surface_colour = Color(0.6622, 0.70505667, 0.86, 1)
 
 [node name="Collision" type="CollisionPolygon2D" parent="Terrain" unique_id=761641291]
 polygon = PackedVector2Array(48, 0, 1152, -0.05083188, 1200, -1.2061019, 1248, -4.574869, 1296, -10.82257, 1344, -20.171015, 1392, -32.39839, 1440, -46.839268, 1680, -124.71833, 1728, -139.15921, 1776, -151.38658, 1824, -160.73503, 1872, -166.98273, 1920, -170.3515, 1968, -171.50677, 2160, -171.5576, 2208, -171.48795, 2256, -169.9049, 2304, -165.28879, 2352, -156.72772, 2400, -143.9178, 2448, -127.16296, 2496, -107.375015, 6192, 1538.1206, 6240, 1559.4219, 6288, 1579.2098, 6336, 1595.9647, 6384, 1608.7747, 6432, 1617.3357, 6480, 1621.9518, 6528, 1623.5348, 6720, 1623.6045, 6768, 1623.5348, 6816, 1621.9518, 6864, 1617.3357, 6912, 1608.7747, 6960, 1595.9647, 7008, 1579.2098, 7056, 1559.4219, 7296, 1452.6367, 7296, 17752.584, 48, 17752.584)
 
 [node name="Fill" type="Polygon2D" parent="Terrain" unique_id=1270329161]
-color = Color(0.83, 0.37682003, 0.13280001, 1)
+color = Color(0.46, 0.20884003, 0.07360002, 1)
 polygon = PackedVector2Array(48, 0, 1152, -0.05083188, 1200, -1.2061019, 1248, -4.574869, 1296, -10.82257, 1344, -20.171015, 1392, -32.39839, 1440, -46.839268, 1680, -124.71833, 1728, -139.15921, 1776, -151.38658, 1824, -160.73503, 1872, -166.98273, 1920, -170.3515, 1968, -171.50677, 2160, -171.5576, 2208, -171.48795, 2256, -169.9049, 2304, -165.28879, 2352, -156.72772, 2400, -143.9178, 2448, -127.16296, 2496, -107.375015, 6192, 1538.1206, 6240, 1559.4219, 6288, 1579.2098, 6336, 1595.9647, 6384, 1608.7747, 6432, 1617.3357, 6480, 1621.9518, 6528, 1623.5348, 6720, 1623.6045, 6768, 1623.5348, 6816, 1621.9518, 6864, 1617.3357, 6912, 1608.7747, 6960, 1595.9647, 7008, 1579.2098, 7056, 1559.4219, 7296, 1452.6367, 7296, 17752.584, 48, 17752.584)
 
 [node name="Surface" type="Line2D" parent="Terrain" unique_id=965397278]
