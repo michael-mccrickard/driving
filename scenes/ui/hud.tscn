@@ -193,6 +193,28 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_erw67")
 theme_override_styles/hover = SubResource("StyleBoxFlat_kicr4")
 icon = ExtResource("5_4jqwt")
 
+[node name="MusicMenu" type="VBoxContainer" parent="." unique_id=1628229327]
+unique_name_in_owner = true
+visible = false
+offset_left = 184.0
+offset_top = 250.0
+offset_right = 374.0
+offset_bottom = 612.0
+theme_override_constants/separation = 4
+
+[node name="MusicTracks" type="VBoxContainer" parent="MusicMenu" unique_id=1628229328]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="MusicEnabled" type="CheckButton" parent="MusicMenu" unique_id=1628229329]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Music On"
+button_pressed = true
+alignment = 1
+
 [node name="ClearRecordButton" type="Button" parent="." unique_id=1628229326]
 unique_name_in_owner = true
 offset_left = 193.0
