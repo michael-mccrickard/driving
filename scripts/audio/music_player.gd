@@ -28,6 +28,10 @@ var _warned := {}
 func set_track(new_track: String) -> void:
 	var trimmed := new_track.strip_edges()
 	if trimmed == track:
+		if _running and enabled:
+			stop()
+			stream = null
+			_refresh()
 		return
 	track = trimmed
 	stream = null
