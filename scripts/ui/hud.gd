@@ -74,6 +74,7 @@ const LEVEL_MENU_ROW_SEPARATION := 4
 ## MusicToggle is a plain Button, not a CheckButton, so nothing about it shows
 ## whether the music is on. Dim its icon when it is off.
 const MUSIC_OFF_MODULATE := Color(1, 1, 1, 0.4)
+const MUSIC_BUTTON_FONT_SIZE := 16
 
 @onready var _level_label: Label = %LevelLabel
 # Parked: these three are hidden in hud.tscn for now, in both modes. They are
@@ -91,6 +92,9 @@ const MUSIC_OFF_MODULATE := Color(1, 1, 1, 0.4)
 @onready var _music_name: Label = %MusicName
 @onready var _music_input: LineEdit = %MusicInput
 @onready var _music_toggle: Button = %MusicToggle
+@onready var _music_menu: VBoxContainer = %MusicMenu
+@onready var _music_tracks: VBoxContainer = %MusicTracks
+@onready var _music_enabled_button: CheckButton = %MusicEnabled
 @onready var _result_panel: PanelContainer = %ResultPanel
 @onready var _fuel_line: Label = %FuelLine
 @onready var _record_line: Label = %RecordLine
@@ -101,7 +105,7 @@ const MUSIC_OFF_MODULATE := Color(1, 1, 1, 0.4)
 @onready var _next_button: Button = %NextButton
 @onready var _level_menu: HBoxContainer = %LevelMenu
 
-var mode := Mode.AUTHOR
+var mode := Mode.PLAY
 
 # Must start equal to the colour authored on FuelValue in hud.tscn.
 var _fuel_colour := COLOUR_FUEL_OK
@@ -109,6 +113,9 @@ var _fuel_colour := COLOUR_FUEL_OK
 # MusicToggle presses rather than latches, so the on/off state lives here.
 # Starts on: a run opens with its track playing.
 var _music_enabled := true
+var _music_tracks_list := PackedStringArray()
+var _music_track_buttons: Array[Button] = []
+var _current_music_track := ""
 
 # The level menu: the names it was built from, and which of them is loaded.
 var _level_names := PackedStringArray()
@@ -134,6 +141,8 @@ func _ready() -> void:
 
 	# A plain Button only reports the press, so the switch is flipped by hand.
 	_music_toggle.pressed.connect(_on_music_toggle_pressed)
+	_music_enabled_button.toggled.connect(_on_music_enabled_toggled)
+	_music_enabled_button.button_pressed = _music_enabled
 	_paint_music_toggle()
 	_music_input.add_theme_font_size_override("font_size", INPUT_FONT_SIZE)
 	_music_input.text_submitted.connect(_on_music_submitted)
@@ -234,8 +243,28 @@ func set_current_level(index: int) -> void:
 
 ## Pushes the level's track into the Music field. Typing over it is a live
 ## override; loading a level puts the level's own track back.
+func set_music_tracks(tracks: PackedStringArray) -> void:
+	_music_tracks_list = tracks
+	_music_track_buttons.clear()
+	for old: Node in _music_tracks.get_children():
+		_music_tracks.remove_child(old)
+		old.queue_free()
+	for track in tracks:
+		var button := Button.new()
+		button.text = track
+		button.focus_mode = Control.FOCUS_NONE
+		button.custom_minimum_size = Vector2(170, 30)
+		button.add_theme_font_size_override("font_size", MUSIC_BUTTON_FONT_SIZE)
+		button.pressed.connect(_on_music_track_pressed.bind(track))
+		_music_tracks.add_child(button)
+		_music_track_buttons.append(button)
+	_paint_music_track_buttons()
+
+
 func set_music_track(track: String) -> void:
 	_music_input.text = track
+	_current_music_track = track
+	_paint_music_track_buttons()
 
 
 func set_speed(pixels_per_second: float) -> void:
