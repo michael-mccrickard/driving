@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://38qib3e2awh1"]
 
 [ext_resource type="Script" uid="uid://dm6i58j3vu3v2" path="res://scripts/levels/backdrop.gd" id="1_w3qwo"]
-[ext_resource type="Resource" uid="uid://7issp50wequu" path="res://resources/scenery/yellow_scenery.tres" id="2_w3qwo"]
+[ext_resource type="Resource" uid="uid://dofu2e34yawfs" path="res://resources/scenery/orange_scenery.tres" id="2_w3qwo"]
 [ext_resource type="Script" uid="uid://cl227mssm30t0" path="res://scripts/levels/backdrop_painter.gd" id="3_l2hf1"]
 [ext_resource type="Texture2D" uid="uid://dae11tua0vtxg" path="res://assets/sprites/enjoy.png" id="4_dyptq"]
 [ext_resource type="Script" uid="uid://b38j02y8uvhfr" path="res://scripts/levels/terrain_author.gd" id="5_qn6w1"]
@@ -31,7 +31,6 @@ scale = Vector2(0.55419356, 0.66818184)
 texture = ExtResource("4_dyptq")
 
 [node name="Terrain" type="StaticBody2D" parent="." unique_id=318168794]
-visible = false
 collision_mask = 0
 script = ExtResource("5_qn6w1")
 shape_text = "#Shortest downhill
