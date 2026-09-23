@@ -397,13 +397,35 @@ func is_music_enabled() -> bool:
 
 
 func _on_music_toggle_pressed() -> void:
-	_music_enabled = not _music_enabled
+	_music_menu.visible = not _music_menu.visible
+
+
+func _on_music_enabled_toggled(enabled: bool) -> void:
+	_music_enabled = enabled
 	_paint_music_toggle()
 	music_enabled_set.emit(_music_enabled)
 
 
+func _on_music_track_pressed(track: String) -> void:
+	_current_music_track = track
+	_music_input.text = track
+	_paint_music_track_buttons()
+	_music_menu.visible = false
+	music_track_set.emit(track)
+
+
 func _paint_music_toggle() -> void:
 	_music_toggle.modulate = Color.WHITE if _music_enabled else MUSIC_OFF_MODULATE
+	_music_enabled_button.button_pressed = _music_enabled
+
+
+func _paint_music_track_buttons() -> void:
+	for button: Button in _music_track_buttons:
+		var colour := COLOUR_LEVEL_CURRENT if button.text == _current_music_track else COLOUR_LEVEL
+		for role: String in [
+			"font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color",
+		]:
+			button.add_theme_color_override(role, colour)
 
 
 func _on_music_submitted(track: String) -> void:
