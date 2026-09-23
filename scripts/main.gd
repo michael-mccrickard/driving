@@ -128,6 +128,7 @@ func _ready() -> void:
 	# The HUD holds no levels of its own, so it is handed the names for the menu
 	# behind NEXT and hands back an index into this same list.
 	_hud.set_levels(_level_names())
+	_hud.set_music_tracks(_music_tracks())
 	_hud.level_selected.connect(jump_to_level)
 	_hud.music_track_set.connect(_music.set_track)
 	_hud.music_enabled_set.connect(_music.set_enabled)
@@ -245,6 +246,16 @@ func _level_names() -> PackedStringArray:
 	for config: LevelConfig in levels:
 		names.append(config.display_name)
 	return names
+
+
+## The music choices available to the player, collected from the active level
+## resources. Duplicate track names are shown only once.
+func _music_tracks() -> PackedStringArray:
+	var tracks := PackedStringArray()
+	for config: LevelConfig in levels:
+		if not tracks.has(config.music):
+			tracks.append(config.music)
+	return tracks
 
 
 ## Puts last session's burn rate and top speed back into the car. Deliberately
