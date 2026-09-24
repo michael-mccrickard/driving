@@ -413,7 +413,7 @@ func _shape_label(index: int) -> String:
 ## anchor cannot express a feature narrower than one -- and empty runs are left
 ## out rather than kept as joins between nothing and nothing.
 func _collect_runs() -> Array[Vector3]:
-	var runs: Array[Vector3] = []
+	var runs: Array[Vector3> = []
 	_run_shapes = PackedInt32Array()
 	if flat_start_segments > 0:
 		runs.append(Vector3(flat_start_segments, 0.0, NAN))
