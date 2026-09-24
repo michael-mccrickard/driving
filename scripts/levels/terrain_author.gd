@@ -178,8 +178,6 @@ var readout := ""
 var _shapes := PackedVector3Array()
 # Gaps written in shape_text, positioned sequentially in authoring order.
 var _text_gaps := PackedVector2Array()
-# Maps each profile run back to its source shape; -1 marks pads and gap runs.
-var _run_shapes := PackedInt32Array()
 # Which line of `shape_text` each of those shapes came from, so a complaint can
 # name the line rather than an index into a list nobody typed. Empty when the
 # array is the source.
@@ -413,45 +411,38 @@ func _shape_label(index: int) -> String:
 ## anchor cannot express a feature narrower than one -- and empty runs are left
 ## out rather than kept as joins between nothing and nothing.
 func _collect_runs() -> Array[Vector3]:
-	var runs: Array[Vector3> = []
-	_run_shapes = PackedInt32Array()
+	var runs: Array[Vector3] = []
 	if flat_start_segments > 0:
 		runs.append(Vector3(flat_start_segments, 0.0, NAN))
-		_run_shapes.append(-1)
 	var gap_index := 0
-	for shape_index in _shapes.size():
-		var shape := _shapes[shape_index]
+	for shape in _shapes:
 		var shape_x := 0.0
 		for prior in runs:
 			shape_x += prior.x * segment_width
 		while gap_index < _text_gaps.size() and _text_gaps[gap_index].x <= shape_x:
 			var gap := _text_gaps[gap_index]
 			runs.append(Vector3(maxi(1, ceili(gap.y / segment_width)), 0.0, NAN))
-			_run_shapes.append(-1)
 			gap_index += 1
 		runs.append(Vector3(_shape_segments(shape), _shape_slope(shape), _shape_level(shape)))
-		_run_shapes.append(shape_index)
 	while gap_index < _text_gaps.size():
 		var gap := _text_gaps[gap_index]
 		runs.append(Vector3(maxi(1, ceili(gap.y / segment_width)), 0.0, NAN))
-		_run_shapes.append(-1)
 		gap_index += 1
 	if flat_end_segments > 0:
 		runs.append(Vector3(flat_end_segments, 0.0, NAN))
-		_run_shapes.append(-1)
 	if runs.is_empty():
 		push_warning("%s: no shapes and no flats; falling back to a flat pad." % name)
 		runs.append(Vector3(FALLBACK_SEGMENTS, 0.0, NAN))
-		_run_shapes.append(-1)
 	return runs
 
 
 ## Which shape a run came from, or -1 for the spawn pad and the run-out, which
 ## bracket the list rather than being part of it.
 func _shape_of_run(run_index: int) -> int:
-	if run_index < 0 or run_index >= _run_shapes.size():
+	var shape_index := run_index - (1 if flat_start_segments > 0 else 0)
+	if shape_index < 0 or shape_index >= _shapes.size():
 		return -1
-	return _run_shapes[run_index]
+	return shape_index
 
 
 ## Whether a run is pinned to a height of its own rather than carrying on from
