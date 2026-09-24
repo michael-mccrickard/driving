@@ -176,6 +176,8 @@ var readout := ""
 # when that field is empty. Everything below works off this rather than off
 # either export, so the two sources cannot disagree about what got built.
 var _shapes := PackedVector3Array()
+# Gaps written in shape_text, positioned sequentially in authoring order.
+var _text_gaps := PackedVector2Array()
 # Which line of `shape_text` each of those shapes came from, so a complaint can
 # name the line rather than an index into a list nobody typed. Empty when the
 # array is the source.
@@ -263,9 +265,10 @@ func _rebuild_profile() -> void:
 			# Nothing before the first point to step off, so a track opening on a
 			# levelled flat simply starts there.
 			var shape_index := _shape_of_run(run_index)
+			var previous_height := height
+			height += run.z
 			if index > 0 and shape_index >= 0:
-				_risers[shape_index] = run.z - height
-			height = run.z
+				_risers[shape_index] = height - previous_height
 			_heights[index] = height
 		for _i in int(run.x):
 			# Taken at the segment's centre, so a join is rounded symmetrically
@@ -309,6 +312,7 @@ func _highest() -> float:
 func _resolve_shapes() -> void:
 	_shape_lines = PackedInt32Array()
 	_parse_errors = PackedStringArray()
+	_text_gaps = PackedVector2Array()
 	if not _text_is_authoritative():
 		_shapes = shapes
 		return
@@ -327,6 +331,7 @@ func _resolve_shapes() -> void:
 ## a shape nobody asked for in it.
 func _parse_shape_text() -> PackedVector3Array:
 	var parsed := PackedVector3Array()
+	var cursor_x := 0.0
 	var lines := shape_text.split("\n")
 	for i in lines.size():
 		var line: String = lines[i]
@@ -337,21 +342,34 @@ func _parse_shape_text() -> PackedVector3Array:
 		if words.is_empty():
 			continue
 		var number := i + 1
-
 		var word: String = words[0].to_lower()
+
+		if word == "gap":
+			if words.size() != 2:
+				_parse_errors.append("Line %d: gap needs exactly one length." % number)
+				continue
+			if not words[1].is_valid_float():
+				_parse_errors.append("Line %d: '%s' is not a gap length in pixels." % [number, words[1]])
+				continue
+			var gap_length := words[1].to_float()
+			if gap_length <= 0.0:
+				_parse_errors.append("Line %d: gap length must be greater than zero." % number)
+				continue
+			var gap_segments := maxi(1, ceili(gap_length / segment_width))
+			var actual_gap_length := float(gap_segments) * segment_width
+			_text_gaps.append(Vector2(cursor_x, actual_gap_length))
+			cursor_x += actual_gap_length
+			continue
+
 		if not SHAPE_WORDS.has(word):
-			_parse_errors.append(
-				"Line %d: '%s' is not one of flat, up, down." % [number, words[0]]
-			)
+			_parse_errors.append("Line %d: '%s' is not one of flat, up, down or gap." % [number, words[0]])
 			continue
 		var kind: int = SHAPE_WORDS[word]
 		if words.size() < 2:
 			_parse_errors.append("Line %d: %s needs a length in pixels." % [number, word])
 			continue
 		if not words[1].is_valid_float():
-			_parse_errors.append(
-				"Line %d: '%s' is not a length in pixels." % [number, words[1]]
-			)
+			_parse_errors.append("Line %d: '%s' is not a length in pixels." % [number, words[1]])
 			continue
 		if words.size() > 3:
 			_parse_errors.append("Line %d: '%s' is one value too many." % [number, words[3]])
@@ -364,18 +382,18 @@ func _parse_shape_text() -> PackedVector3Array:
 					"Line %d: '%s' is not a %s." % [
 						number,
 						words[2],
-						"height in pixels" if kind == Shape.FLAT else "steepness in degrees",
+						"relative height change in pixels" if kind == Shape.FLAT else "steepness in degrees",
 					]
 				)
 				continue
 			value = words[2].to_float()
-			# A flat given a second value is a flat that says where it sits, which
-			# is a different shape from one that carries on where the last left off.
 			if kind == Shape.FLAT:
 				kind = Shape.FLAT_AT
 
-		parsed.append(Vector3(kind, words[1].to_float(), value))
+		var shape_length := words[1].to_float()
+		parsed.append(Vector3(kind, shape_length, value))
 		_shape_lines.append(number)
+		cursor_x += float(maxi(1, ceili(maxf(shape_length, 0.0) / segment_width))) * segment_width
 	return parsed
 
 
@@ -396,8 +414,20 @@ func _collect_runs() -> Array[Vector3]:
 	var runs: Array[Vector3] = []
 	if flat_start_segments > 0:
 		runs.append(Vector3(flat_start_segments, 0.0, NAN))
+	var gap_index := 0
 	for shape in _shapes:
+		var shape_x := 0.0
+		for prior in runs:
+			shape_x += prior.x * segment_width
+		while gap_index < _text_gaps.size() and _text_gaps[gap_index].x <= shape_x:
+			var gap := _text_gaps[gap_index]
+			runs.append(Vector3(maxi(1, ceili(gap.y / segment_width)), 0.0, NAN))
+			gap_index += 1
 		runs.append(Vector3(_shape_segments(shape), _shape_slope(shape), _shape_level(shape)))
+	while gap_index < _text_gaps.size():
+		var gap := _text_gaps[gap_index]
+		runs.append(Vector3(maxi(1, ceili(gap.y / segment_width)), 0.0, NAN))
+		gap_index += 1
 	if flat_end_segments > 0:
 		runs.append(Vector3(flat_end_segments, 0.0, NAN))
 	if runs.is_empty():
@@ -444,6 +474,14 @@ func _shape_slope(shape: Vector3) -> float:
 ## wherever the shape before it ended. Only a levelled flat has one.
 func _shape_level(shape: Vector3) -> float:
 	return shape.z if _shape_kind(shape) == Shape.FLAT_AT else NAN
+
+
+func _active_gaps() -> PackedVector2Array:
+	if _text_gaps.is_empty():
+		return gaps
+	var result := gaps
+	result.append_array(_text_gaps)
+	return result
 
 
 func _shape_kind(shape: Vector3) -> int:
