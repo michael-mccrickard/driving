@@ -363,7 +363,7 @@ func _drop_collinear(points: PackedVector2Array) -> PackedVector2Array:
 
 
 func _is_gap(local_x: float) -> bool:
-	for gap in gaps:
+	for gap in _active_gaps():
 		if local_x >= gap.x and local_x <= gap.x + gap.y:
 			return true
 	return false
@@ -590,14 +590,14 @@ func set_author_mode(authoring: bool) -> void:
 
 func _build_gap_labels() -> void:
 	_clear_gap_labels()
-	if not _author_mode or gaps.is_empty():
+	if not _author_mode or _active_gaps().is_empty():
 		return
 	if _gap_label_layer == null:
 		_gap_label_layer = CanvasLayer.new()
 		_gap_label_layer.name = "GapLabels"
 		_gap_label_layer.layer = 100
 		add_child(_gap_label_layer)
-	for i in gaps.size():
+	for i in _active_gaps().size():
 		var label := Label.new()
 		label.text = "G%d" % i
 		label.add_theme_font_size_override("font_size", GAP_LABEL_FONT_SIZE)
@@ -628,8 +628,8 @@ func _update_gap_labels() -> void:
 	var viewport_size := get_viewport_rect().size
 	var screen_y := viewport_size.y * GAP_LABEL_SCREEN_Y_FRACTION
 	var canvas_transform := get_viewport().get_canvas_transform()
-	for i in mini(_gap_labels.size(), gaps.size()):
-		var gap := gaps[i]
+	for i in mini(_gap_labels.size(), _active_gaps().size()):
+		var gap := _active_gaps()[i]
 		var center := to_global(Vector2(gap.x + gap.y * 0.5, 0.0))
 		var screen_position := canvas_transform * center
 		var label := _gap_labels[i]
