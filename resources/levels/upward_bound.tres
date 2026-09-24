@@ -12,5 +12,5 @@ track = ExtResource("3_g4jxt")
 car = ExtResource("1_g4jxt")
 burn_rate = 0.004
 max_speed_kmh = 80.0
-music = "track24.mp3"
+music = "Chip.mp3"
 parallax_speed_multiplier = 0.65
