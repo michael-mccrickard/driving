@@ -84,6 +84,11 @@ const COLLINEAR_TOLERANCE := 0.05
 ## is a break the car has to jump: the track simply ends at the near lip and
 ## starts again at the far one, and the profile carries on underneath, so a gap
 ## cut across a crest lands lower than it takes off.
+##
+## An authored track has a second place to write one down -- a `gap` line in its
+## shape list, placed by where it is written rather than by an X measured from
+## the start -- and the two lists are added together. _active_gaps() is what the
+## build cuts, and is the pair of them.
 @export var gaps := PackedVector2Array():
 	set(value):
 		gaps = value
@@ -155,6 +160,11 @@ const COLLINEAR_TOLERANCE := 0.05
 		queue_redraw()
 
 var _surface: PackedVector2Array = PackedVector2Array()
+# The gaps this build is cutting: `gaps`, plus whatever else the subclass has to
+# add to them. Settled once per build, in _build_surface(), because the ramps and
+# the split both walk it per point and neither may see a different list from the
+# other.
+var _gaps_in_effect := PackedVector2Array()
 # Local Y the fill and the collision polygons close at, settled once per build
 # in generate() so every piece of a gapped track closes at the same depth.
 var _fill_bottom := 0.0
@@ -195,6 +205,14 @@ const GAP_LABEL_WIDTH := 120.0
 ## and may rely on it.
 func _begin_profile() -> void:
 	pass
+
+
+## The gaps to cut, which is the `gaps` list on its own unless a subclass has
+## somewhere else to write them down -- an authored track has them in its shape
+## list as well. Asked once per build, after _begin_profile(), so a subclass that
+## works its gaps out while it lays out its profile has them ready by then.
+func _active_gaps() -> PackedVector2Array:
+	return gaps
 
 
 # --- The build ---------------------------------------------------------------
@@ -304,6 +322,10 @@ func generate() -> void:
 
 func _build_surface() -> PackedVector2Array:
 	_begin_profile()
+	# After the profile and before anything is sampled: the subclass has just laid
+	# out the shape it is building, which is where an authored track's own gaps are
+	# written down.
+	_gaps_in_effect = _active_gaps()
 	var points := PackedVector2Array()
 	for i in _profile_segments() + 1:
 		var x := float(i) * segment_width
@@ -320,7 +342,7 @@ func _build_surface() -> PackedVector2Array:
 ## rather than leaving a level with nothing to drive on.
 func _split_at_gaps(surface: PackedVector2Array) -> Array[PackedVector2Array]:
 	var pieces: Array[PackedVector2Array] = []
-	if gaps.is_empty():
+	if _gaps_in_effect.is_empty():
 		pieces.append(surface)
 		return pieces
 	var piece := PackedVector2Array()
@@ -363,7 +385,7 @@ func _drop_collinear(points: PackedVector2Array) -> PackedVector2Array:
 
 
 func _is_gap(local_x: float) -> bool:
-	for gap in gaps:
+	for gap in _gaps_in_effect:
 		if local_x >= gap.x and local_x <= gap.x + gap.y:
 			return true
 	return false
@@ -541,7 +563,7 @@ func _ramp_lift(local_x: float) -> float:
 	if gap_ramp_height <= 0.0:
 		return 0.0
 	var lift := 0.0
-	for gap in gaps:
+	for gap in _gaps_in_effect:
 		var into_ramp := local_x - (gap.x - gap_ramp_length)
 		if into_ramp <= 0.0 or local_x > gap.x:
 			continue
@@ -590,14 +612,14 @@ func set_author_mode(authoring: bool) -> void:
 
 func _build_gap_labels() -> void:
 	_clear_gap_labels()
-	if not _author_mode or gaps.is_empty():
+	if not _author_mode or _gaps_in_effect.is_empty():
 		return
 	if _gap_label_layer == null:
 		_gap_label_layer = CanvasLayer.new()
 		_gap_label_layer.name = "GapLabels"
 		_gap_label_layer.layer = 100
 		add_child(_gap_label_layer)
-	for i in gaps.size():
+	for i in _gaps_in_effect.size():
 		var label := Label.new()
 		label.text = "G%d" % i
 		label.add_theme_font_size_override("font_size", GAP_LABEL_FONT_SIZE)
@@ -628,8 +650,8 @@ func _update_gap_labels() -> void:
 	var viewport_size := get_viewport_rect().size
 	var screen_y := viewport_size.y * GAP_LABEL_SCREEN_Y_FRACTION
 	var canvas_transform := get_viewport().get_canvas_transform()
-	for i in mini(_gap_labels.size(), gaps.size()):
-		var gap := gaps[i]
+	for i in mini(_gap_labels.size(), _gaps_in_effect.size()):
+		var gap := _gaps_in_effect[i]
 		var center := to_global(Vector2(gap.x + gap.y * 0.5, 0.0))
 		var screen_position := canvas_transform * center
 		var label := _gap_labels[i]

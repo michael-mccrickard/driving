@@ -972,7 +972,7 @@ func _the_authored_track_is_what_was_written(main: Node2D) -> void:
 	# Steepness is advisory: Denver deliberately steps a staircase of descents past
 	# the angle the car is good for, and the node says so about each one. What a
 	# shipped track must not have on it is the warnings that mean a mistake -- a
-	# line that would not parse, a kind that is not one of the four, a shape too
+	# line that would not parse, a kind that is not one of the five, a shape too
 	# short to exist.
 	var faults := PackedStringArray()
 	for warning in terrain._get_configuration_warnings():
@@ -989,27 +989,40 @@ func _the_authored_track_is_what_was_written(main: Node2D) -> void:
 	var expected_segments: int = terrain.flat_start_segments
 	var expected_height := 0.0
 	var steepest := 0.0
-	# Segments that are the step into a levelled flat rather than a face any shape
+	# Segments that are the step into a stepped flat rather than a face any shape
 	# asked for. A riser is a discontinuity on purpose, so the steepness and the
 	# kink below step over it rather than reporting it as a fault.
 	var risers := PackedInt32Array()
+	# The segment either side of a gap, where the slope changes at a lip rather
+	# than over a rounded join. The faces themselves are still checked; it is only
+	# the kink at the lip that is allowed to be a corner.
+	var lips := PackedInt32Array()
 	for shape in shapes:
-		var segments: int = maxi(1, ceili(maxf(shape.y, 0.0) / terrain.segment_width))
+		var kind := int(roundf(shape.x))
+		# A gap takes at least two segments, because what it cuts away is the ground
+		# between its lips; everything else takes at least one.
+		var least: int = 2 if kind == TerrainAuthor.Shape.GAP else 1
+		var segments: int = maxi(least, ceili(maxf(shape.y, 0.0) / terrain.segment_width))
 		var run: float = float(segments) * terrain.segment_width
 		var steepness: float = shape.z if shape.z > 0.0 else terrain.default_steepness
-		match int(roundf(shape.x)):
+		match kind:
 			TerrainAuthor.Shape.SLOPE_UP:
 				expected_height += run * tan(deg_to_rad(steepness))
 				steepest = maxf(steepest, steepness)
 			TerrainAuthor.Shape.SLOPE_DOWN:
 				expected_height -= run * tan(deg_to_rad(steepness))
 				steepest = maxf(steepest, steepness)
-			TerrainAuthor.Shape.FLAT_AT:
-				# A levelled flat states its height outright, whatever the shape
-				# before it was doing, and the segment before the join is the riser.
-				if not is_equal_approx(expected_height, shape.z):
+			TerrainAuthor.Shape.FLAT_STEP:
+				# A stepped flat jumps by the rise it names, whatever the shape before
+				# it was doing, and the segment before the join is the riser.
+				expected_height += shape.z
+				if not is_zero_approx(shape.z):
 					risers.append(expected_segments - 1)
-				expected_height = shape.z
+			TerrainAuthor.Shape.GAP:
+				# Level ground at the height the list is already at, with the ground
+				# over it taken away. The profile under it is what is sampled here.
+				lips.append(expected_segments - 1)
+				lips.append(expected_segments + segments - 1)
 		expected_segments += segments
 	expected_segments += terrain.flat_end_segments
 
@@ -1045,7 +1058,7 @@ func _the_authored_track_is_what_was_written(main: Node2D) -> void:
 			continue
 		var slope: float = (heights[i + 1] - heights[i]) / terrain.segment_width
 		sampled = maxf(sampled, absf(slope))
-		if i > 0 and not risers.has(i - 1):
+		if i > 0 and not risers.has(i - 1) and not lips.has(i - 1):
 			var previous: float = (heights[i] - heights[i - 1]) / terrain.segment_width
 			kink = maxf(kink, absf(slope - previous))
 	_check(

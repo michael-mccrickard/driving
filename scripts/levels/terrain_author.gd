@@ -45,14 +45,24 @@ extends TerrainBase
 ## Steepness is in *degrees*, so it can be read against the one number that
 ## matters: much past 30 degrees is a face the car cannot climb.
 ##
-## A flat may also be given the *height it sits at* -- `flat 300 -240`, or a
-## FLAT_AT triple -- measured up-positive from the spawn pad, the same way the
-## readout reports heights. The flat then starts exactly there rather than
-## wherever the shape before it happened to end, and the ground steps up or down
-## into it over the one segment before the join: a hard riser, not a ramp, so a
-## list of levelled flats is a staircase. A step up much past 30 degrees over
-## that segment is a wall the car cannot climb, and is called out on the node;
-## a step down is a drop, which is usually the point.
+## A flat may also be given the *step up or down into it* -- `flat 300 -240`, or
+## a FLAT_STEP triple -- measured from wherever the shape before it ended, the
+## same way a slope's rise is. The ground takes that step over the one segment
+## before the join and then holds level: a hard riser, not a ramp, so a list of
+## stepped flats is a staircase. A step up much past 30 degrees over that segment
+## is a wall the car cannot climb, and is called out on the node; a step down is
+## a drop, which is usually the point.
+##
+## `gap 2000` cuts a *hole* where the list has got to, as wide as it asks for.
+## The ground under it carries on level at the height the shape before it ended,
+## so both lips sit at that height and the shape after the gap picks up from
+## there; the joins at the lips are left unrounded, so the car takes off at
+## exactly the angle the shape before was driving at. It is the same hole an
+## entry in TerrainBase's `gaps` cuts -- the two lists are added together, and a
+## gap line gets the level's launch ramp like any other -- except that it is
+## placed by where it is written rather than by an X counted from the start of
+## the track, so the shapes before it can be rewritten without it having to be
+## moved.
 
 ## Local metres, for the configuration warnings. Reached through the script
 ## rather than the GameState autoload name, because autoloads do not exist in
@@ -61,7 +71,7 @@ const GameStateScript := preload("res://scripts/autoload/game_state.gd")
 
 ## Kinds of shape, and the number that selects one in the x of each entry in
 ## `shapes`. What the z of an entry means depends on the kind: degrees to the two
-## slopes, a height to a levelled flat, and nothing at all to a plain flat.
+## slopes, a step to a stepped flat, and nothing at all to a plain flat or a gap.
 enum Shape {
 	## 0 -- level ground, length only, carrying on from the shape before it.
 	FLAT,
@@ -69,9 +79,12 @@ enum Shape {
 	SLOPE_UP,
 	## 2 -- drops at `steepness` degrees.
 	SLOPE_DOWN,
-	## 3 -- level ground held at the height in z, up-positive from the spawn pad,
-	## with a step up or down into it. What a staircase is made of.
-	FLAT_AT,
+	## 3 -- level ground, stepped up or down into by the rise in z from wherever
+	## the shape before it ended. What a staircase is made of.
+	FLAT_STEP,
+	## 4 -- a hole in the track, as wide as the length says, with the ground under
+	## it level at the height the shape before it ended. `gap 2000` in the text.
+	GAP,
 }
 
 ## The words `shape_text` takes, and the kind each one means. Lower case; the
@@ -80,6 +93,7 @@ const SHAPE_WORDS := {
 	"flat": Shape.FLAT,
 	"up": Shape.SLOPE_UP,
 	"down": Shape.SLOPE_DOWN,
+	"gap": Shape.GAP,
 }
 
 ## The steepest face the car can be relied on to climb, in degrees. Not enforced
@@ -106,11 +120,13 @@ var readout := ""
 ##   up   600 16
 ##   down 900 20
 ##   up   500        # no steepness given -> default_steepness
-##   flat 300 -240   # a flat 240 px below the pad, stepped down into
+##   flat 300 -240   # a flat stepped 240 px down from where the last shape left
+##   gap  400        # 400 px of nothing to jump, at the height it left off at
 ##
-## The words are `flat`, `up` and `down`; then a length in pixels; then a second
-## value, which is a steepness in degrees on the two slopes and the height it
-## sits at on a `flat`. Blank lines and anything after a `#` are ignored.
+## The words are `flat`, `up`, `down` and `gap`; then a length in pixels; then,
+## on everything but a gap, a second value -- a steepness in degrees on the two
+## slopes, and the step up or down into it on a `flat`. Blank lines and anything
+## after a `#` are ignored.
 ##
 ## While there is anything here this is the *input*, and `shapes` below is an
 ## output filled in from it -- greyed out in the inspector, the same way
@@ -130,14 +146,14 @@ var readout := ""
 		_request_rebuild()
 ## The track, shape by shape, as (kind, length, value) triples:
 ##
-##   kind      0 Flat, 1 SlopeUp, 2 SlopeDown, 3 FlatAt
+##   kind      0 Flat, 1 SlopeUp, 2 SlopeDown, 3 FlatStep, 4 Gap
 ##   length    horizontal run in pixels, rounded up to a whole segment_width
 ##   value     on the two slopes, degrees from horizontal, where 0 reads as
-##             "use default_steepness"; on FlatAt, the height the flat sits at,
-##             up-positive from the spawn pad; ignored by Flat
+##             "use default_steepness"; on FlatStep, how far up or down the step
+##             into it goes; ignored by Flat and Gap
 ##
 ## So Vector3(1, 600, 18) is "climb for 600 px at 18 degrees", and
-## Vector3(3, 300, -240) is "300 px of flat 240 px below the pad", stepped into.
+## Vector3(3, 300, -240) is "step 240 px down, then 300 px of flat".
 ## Length is the run, not the distance travelled up the face, which is what keeps
 ## the shapes laid out on the same segment grid as everything else. What the list
 ## adds up to is in `readout` above; anything undrivable in it is called out on
@@ -176,22 +192,27 @@ var readout := ""
 # when that field is empty. Everything below works off this rather than off
 # either export, so the two sources cannot disagree about what got built.
 var _shapes := PackedVector3Array()
+# The holes the `gap` shapes in that list turned into, as the (start, width)
+# pairs TerrainBase cuts with. Worked out while the profile is laid out, because
+# where a gap sits is the X the shapes before it happen to add up to.
+var _shape_gaps := PackedVector2Array()
 # Which line of `shape_text` each of those shapes came from, so a complaint can
 # name the line rather than an index into a list nobody typed. Empty when the
 # array is the source.
 var _shape_lines := PackedInt32Array()
 # What would not parse, in the order it was read.
 var _parse_errors := PackedStringArray()
-# The shape list as (segment_count, slope, level) runs, with the spawn pad on
+# The shape list as (segment_count, slope, step) runs, with the spawn pad on
 # the front and the run-out on the back, and the height at every segment
-# integrated out of it. `level` is the height a levelled flat is pinned to, or
-# NAN on a run that simply carries on from the one before it. Both settled once
-# per build, in _begin_profile().
+# integrated out of it. `step` is the rise a stepped flat begins with, or NAN on
+# a run that simply carries on from the one before it. Both settled once per
+# build, in _begin_profile().
 var _runs: Array[Vector3] = []
 var _heights := PackedFloat32Array()
-# The rise of the step into each levelled flat, in pixels, keyed by the shape's
-# place in the list -- positive up. Only what the profile turned out to need, so
-# it is known after the heights are integrated and not before.
+# The rise of the step into each stepped flat, in pixels, keyed by the shape's
+# place in the list -- positive up. Only the steps the profile actually took: a
+# stepped flat at the very start of a track has nothing to step off, and so is
+# not in here at all.
 var _risers: Dictionary[int, float] = {}
 
 
@@ -240,15 +261,20 @@ func _profile_height(index: int) -> float:
 ## ground that comes out is continuous by construction, with no kink anywhere
 ## and no face steeper than the shape it came from asked for.
 ##
-## A levelled flat is the one thing that is *not* integrated: it names the height
-## it sits at, so the join it starts on is set to that height outright and the
+## A stepped flat is the one thing that is *not* integrated: it jumps by the rise
+## it names, so the join it starts on is moved by that much outright and the
 ## integration carries on from there. That leaves the segment before the join as
 ## the riser -- the step of a staircase, and the only discontinuity a shape list
 ## can produce.
+##
+## Laying the runs out is also where the `gap` shapes turn into the holes the
+## build cuts, because it is the first point at which the X each of them starts
+## at is known.
 func _rebuild_profile() -> void:
 	_resolve_shapes()
 	_runs = _collect_runs()
 	_risers.clear()
+	_shape_gaps = PackedVector2Array()
 	var segments := 0
 	for run in _runs:
 		segments += int(run.x)
@@ -259,13 +285,15 @@ func _rebuild_profile() -> void:
 	_heights[0] = height
 	for run_index in _runs.size():
 		var run := _runs[run_index]
-		if _is_levelled(run):
-			# Nothing before the first point to step off, so a track opening on a
-			# levelled flat simply starts there.
+		if _is_gap_run(run_index):
+			_shape_gaps.append(_gap_span(index, int(run.x)))
+		if _is_stepped(run):
+			height += run.z
+			# A track opening on a stepped flat has nothing before the first point to
+			# step off: it simply starts that far up or down instead.
 			var shape_index := _shape_of_run(run_index)
 			if index > 0 and shape_index >= 0:
-				_risers[shape_index] = run.z - height
-			height = run.z
+				_risers[shape_index] = run.z
 			_heights[index] = height
 		for _i in int(run.x):
 			# Taken at the segment's centre, so a join is rounded symmetrically
@@ -279,9 +307,12 @@ func _rebuild_profile() -> void:
 ## The one-line summary shown on the node: how long the track is, how far it
 ## climbs and drops, and where it leaves the car relative to the spawn pad.
 func _describe(segments: int) -> String:
-	return "%d shapes%s, %.0f m, %.1f m to %.1f m, finishing %.1f m up" % [
+	return "%d shapes%s%s, %.0f m, %.1f m to %.1f m, finishing %.1f m up" % [
 		_shapes.size(),
 		" from text" if _text_is_authoritative() else "",
+		# Said out loud because a gap written in the list does not show up in the
+		# `gaps` field, which is the only other place gaps are ever read off.
+		(", %d gaps" % _shape_gaps.size()) if not _shape_gaps.is_empty() else "",
 		GameStateScript.px_to_m(float(segments) * segment_width),
 		GameStateScript.px_to_m(_lowest()),
 		GameStateScript.px_to_m(_highest()),
@@ -320,9 +351,9 @@ func _resolve_shapes() -> void:
 		push_warning("%s: %s" % [name, ", ".join(_parse_errors)])
 
 
-## Reads `shape_text` into shapes. One shape per line, `flat`/`up`/`down` then a
-## length then an optional steepness; `#` starts a comment. A line that will not
-## parse is skipped and complained about rather than guessed at -- a track with
+## Reads `shape_text` into shapes. One shape per line, `flat`/`up`/`down`/`gap`
+## then a length then an optional second value; `#` starts a comment. A line that
+## will not parse is skipped and complained about rather than guessed at -- a track with
 ## one shape missing and a note saying which is easier to fix than a track with
 ## a shape nobody asked for in it.
 func _parse_shape_text() -> PackedVector3Array:
@@ -341,20 +372,27 @@ func _parse_shape_text() -> PackedVector3Array:
 		var word: String = words[0].to_lower()
 		if not SHAPE_WORDS.has(word):
 			_parse_errors.append(
-				"Line %d: '%s' is not one of flat, up, down." % [number, words[0]]
+				"Line %d: '%s' is not one of flat, up, down, gap." % [number, words[0]]
 			)
 			continue
 		var kind: int = SHAPE_WORDS[word]
 		if words.size() < 2:
-			_parse_errors.append("Line %d: %s needs a length in pixels." % [number, word])
+			_parse_errors.append(
+				"Line %d: %s needs a %s in pixels."
+				% [number, word, "width" if kind == Shape.GAP else "length"]
+			)
 			continue
 		if not words[1].is_valid_float():
 			_parse_errors.append(
-				"Line %d: '%s' is not a length in pixels." % [number, words[1]]
+				"Line %d: '%s' is not a %s in pixels."
+				% [number, words[1], "width" if kind == Shape.GAP else "length"]
 			)
 			continue
-		if words.size() > 3:
-			_parse_errors.append("Line %d: '%s' is one value too many." % [number, words[3]])
+		# A gap is a width and nothing else: there is no slope to a hole, and the
+		# height it sits at is whatever the shape before it left off at.
+		var most := 2 if kind == Shape.GAP else 3
+		if words.size() > most:
+			_parse_errors.append("Line %d: '%s' is one value too many." % [number, words[most]])
 			continue
 
 		var value := 0.0
@@ -364,15 +402,16 @@ func _parse_shape_text() -> PackedVector3Array:
 					"Line %d: '%s' is not a %s." % [
 						number,
 						words[2],
-						"height in pixels" if kind == Shape.FLAT else "steepness in degrees",
+						("step up or down in pixels" if kind == Shape.FLAT
+							else "steepness in degrees"),
 					]
 				)
 				continue
 			value = words[2].to_float()
-			# A flat given a second value is a flat that says where it sits, which
-			# is a different shape from one that carries on where the last left off.
+			# A flat given a second value is a flat that steps into place, which is a
+			# different shape from one that carries on where the last left off.
 			if kind == Shape.FLAT:
-				kind = Shape.FLAT_AT
+				kind = Shape.FLAT_STEP
 
 		parsed.append(Vector3(kind, words[1].to_float(), value))
 		_shape_lines.append(number)
@@ -397,7 +436,7 @@ func _collect_runs() -> Array[Vector3]:
 	if flat_start_segments > 0:
 		runs.append(Vector3(flat_start_segments, 0.0, NAN))
 	for shape in _shapes:
-		runs.append(Vector3(_shape_segments(shape), _shape_slope(shape), _shape_level(shape)))
+		runs.append(Vector3(_shape_segments(shape), _shape_slope(shape), _shape_step(shape)))
 	if flat_end_segments > 0:
 		runs.append(Vector3(flat_end_segments, 0.0, NAN))
 	if runs.is_empty():
@@ -415,35 +454,72 @@ func _shape_of_run(run_index: int) -> int:
 	return shape_index
 
 
-## Whether a run is pinned to a height of its own rather than carrying on from
-## the run before it.
-func _is_levelled(run: Vector3) -> bool:
+## Whether a run begins with a step up or down rather than carrying on from the
+## height the run before it ended at.
+func _is_stepped(run: Vector3) -> bool:
 	return not is_nan(run.z)
 
 
+## Whether a run is a hole rather than ground. The run is laid out and integrated
+## like any other flat -- the profile carries on underneath a gap, the same way it
+## does under one cut by `gaps` -- and it is only the ground over it that is taken
+## away, in _gap_span().
+func _is_gap_run(run_index: int) -> bool:
+	var shape_index := _shape_of_run(run_index)
+	return shape_index >= 0 and _shape_kind(_shapes[shape_index]) == Shape.GAP
+
+
+## The (start, width) pair that cuts one gap run out of the track. The run's own
+## end points are its lips and stay as ground, so what is taken away is the
+## segments between them: the pair is inset half a segment at each end, which
+## covers every one of those and neither lip however a sampled X falls.
+func _gap_span(start_index: int, segments: int) -> Vector2:
+	var half := segment_width * 0.5
+	return Vector2(
+		float(start_index) * segment_width + half, float(segments - 1) * segment_width
+	)
+
+
+## The gaps the build cuts: the level's own, and the ones its `gap` shapes turned
+## into. The two are the same thing by the time TerrainBase sees them, and are
+## numbered in that order by the labels author mode puts over them.
+func _active_gaps() -> PackedVector2Array:
+	if _heights.is_empty():
+		_rebuild_profile()
+	if _shape_gaps.is_empty():
+		return gaps
+	var both := PackedVector2Array(gaps)
+	both.append_array(_shape_gaps)
+	return both
+
+
 ## Segments one shape covers. At least one: a shape asking for less than that
-## would otherwise vanish, taking its join with it.
+## would otherwise vanish, taking its join with it. A gap takes at least two,
+## because what is cut away is the ground *between* its lips and a one-segment
+## gap has none.
 func _shape_segments(shape: Vector3) -> int:
-	return maxi(1, ceili(maxf(shape.y, 0.0) / segment_width))
+	var least := 2 if _shape_kind(shape) == Shape.GAP else 1
+	return maxi(least, ceili(maxf(shape.y, 0.0) / segment_width))
 
 
-## Rise over run for one shape, up-positive. Both kinds of flat are level, and an
-## unrecognised kind reads as flat too, with the complaint left to the scene tree
-## rather than pushed once per build.
+## Rise over run for one shape, up-positive. Both kinds of flat are level, a gap
+## is level ground with the ground taken off it, and an unrecognised kind reads as
+## flat too, with the complaint left to the scene tree rather than pushed once per
+## build.
 func _shape_slope(shape: Vector3) -> float:
 	var kind := _shape_kind(shape)
-	# Only the two slopes read z as a steepness: on a levelled flat it is the
-	# height the shape sits at, which is the profile's business, not the slope's.
+	# Only the two slopes read z as a steepness: on a stepped flat it is the rise
+	# into it, which is the profile's business, not the slope's.
 	if kind != Shape.SLOPE_UP and kind != Shape.SLOPE_DOWN:
 		return 0.0
 	var steepness := clampf(shape.z if shape.z > 0.0 else default_steepness, 0.0, MAX_STEEPNESS)
 	return tan(deg_to_rad(steepness)) * (1.0 if kind == Shape.SLOPE_UP else -1.0)
 
 
-## The height a shape holds its ground at, or NAN for one that carries on from
-## wherever the shape before it ended. Only a levelled flat has one.
-func _shape_level(shape: Vector3) -> float:
-	return shape.z if _shape_kind(shape) == Shape.FLAT_AT else NAN
+## The step a shape begins with, or NAN for one that carries on from wherever the
+## shape before it ended. Only a stepped flat has one.
+func _shape_step(shape: Vector3) -> float:
+	return shape.z if _shape_kind(shape) == Shape.FLAT_STEP else NAN
 
 
 func _shape_kind(shape: Vector3) -> int:
@@ -483,17 +559,23 @@ func _slope_at(local_x: float) -> float:
 ## rounding reaches. Never more than half of the shorter of the two, so the
 ## reaches of neighbouring joins cannot overlap and a shape between two others
 ## keeps some of its own slope. 0 where there is no join to round: the ends of
-## the track, two shapes that already share a slope, and the step into a levelled
-## flat.
+## the track, two shapes that already share a slope, the step into a stepped
+## flat, and either lip of a gap.
 func _joint_reach(index: int) -> float:
 	if index <= 0 or index >= _runs.size():
 		return 0.0
 	var before := _runs[index - 1]
 	var after := _runs[index]
-	# A levelled flat begins at the height it names, so this join is a riser and
-	# there is no corner to take off: rounding a step would only smear it either
-	# side of the join it belongs to, and leave the flat sitting off its height.
-	if _is_levelled(after):
+	# A stepped flat begins with its step, so this join is a riser and there is no
+	# corner to take off: rounding a step would only smear it either side of the
+	# join it belongs to, and leave the flat sitting off its height.
+	if _is_stepped(after):
+		return 0.0
+	# A lip is not a corner either. Easing a slope into the flat ground under a gap
+	# would tilt the last stretch the car drives before it takes off, and the first
+	# it lands on -- the two places a jump is decided -- to round ground that has
+	# been cut away.
+	if _is_gap_run(index - 1) or _is_gap_run(index):
 		return 0.0
 	if is_equal_approx(before.y, after.y):
 		return 0.0
@@ -515,13 +597,22 @@ func _get_configuration_warnings() -> PackedStringArray:
 	for i in _shapes.size():
 		var shape := _shapes[i]
 		var kind := _shape_kind(shape)
-		if kind < Shape.FLAT or kind > Shape.FLAT_AT:
+		if kind < Shape.FLAT or kind > Shape.GAP:
 			warnings.append(
-				("%s: kind %d is not one of 0 Flat, 1 SlopeUp, 2 SlopeDown, 3 FlatAt;"
-					+ " treated as Flat.")
+				("%s: kind %d is not one of 0 Flat, 1 SlopeUp, 2 SlopeDown, 3 FlatStep,"
+					+ " 4 Gap; treated as Flat.")
 				% [_shape_label(i), kind]
 			)
-		if shape.y < segment_width:
+		if kind == Shape.GAP:
+			# Two segments, not one: the lips are ground, so a gap only starts taking
+			# anything away at the segment between them.
+			if shape.y < segment_width * 2.0:
+				warnings.append(
+					("%s: a gap of %.0f px is under the two segments (%.0f px) it takes"
+						+ " to cut one, so it is held at two.")
+					% [_shape_label(i), shape.y, segment_width * 2.0]
+				)
+		elif shape.y < segment_width:
 			warnings.append(
 				"%s: length %.0f px is under one segment (%.0f px), so it is held at one."
 				% [_shape_label(i), shape.y, segment_width]
@@ -534,20 +625,19 @@ func _get_configuration_warnings() -> PackedStringArray:
 						+ " the hill or descent may not be drivable.")
 					% [_shape_label(i), steepness, DRIVABLE_STEEPNESS]
 				)
-		# A step *down* into a levelled flat is a drop, which is what stairs are
-		# for. A step up is a wall one segment wide, and the car has to be able to
-		# climb it like any other face.
-		if kind == Shape.FLAT_AT and _risers.get(i, 0.0) > 0.0:
+		# A step *down* into a stepped flat is a drop, which is what stairs are for.
+		# A step up is a wall one segment wide, and the car has to be able to climb
+		# it like any other face.
+		if kind == Shape.FLAT_STEP and _risers.get(i, 0.0) > 0.0:
 			var rise: float = _risers[i]
 			var riser_steepness := rad_to_deg(atan(rise / segment_width))
 			if riser_steepness > DRIVABLE_STEEPNESS:
 				warnings.append(
-					("%s: the %.0f px step up to %.0f is %.0f degrees over one segment,"
+					("%s: the %.0f px step up is %.0f degrees over one segment,"
 						+ " past the %.0f the car can climb.")
 					% [
 						_shape_label(i),
 						rise,
-						shape.z,
 						riser_steepness,
 						DRIVABLE_STEEPNESS,
 					]
