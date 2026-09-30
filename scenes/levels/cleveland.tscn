@@ -48,7 +48,7 @@ down 4000 24
 flat 500
 up 600 24    
 #gap 1                                  
-gap 1000
+gap 1200
 flat 1000
 up 500
 flat 500
@@ -58,33 +58,33 @@ down 4000 30
 flat 500
 up 500 24
 #gap 2
-gap 1000
+gap 1500
 flat 2000
 #down hill 4
 down 4000 30
 flat 200
 up 200 24
 #gap 3
-gap 1000
+gap 1700
 flat 1000
 #downhill 5
 down 4000 30
 flat 200
 up 200 24
 #gap 4
-gap 1000
+gap 1800
 #downhill 6
 down 4000 30
 flat 200
 up 200 24
 #gap 5
-gap 1000
+gap 1900
 #downhill 7
 down 4000 30
 flat 200
 up 200 24
 #gap 6
-gap 1000
+gap 2000
 #downhill 8
 down 4000 30
 flat 200
@@ -121,11 +121,11 @@ end_cap_mode = 2
 curve = SubResource("Curve2D_edits")
 
 [node name="Finish" type="Sprite2D" parent="." unique_id=2020954178]
-position = Vector2(60701, 15748)
+position = Vector2(64868.004, 15744)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("4_hd12p")
 
 [node name="Wall" type="Sprite2D" parent="." unique_id=378623486]
-position = Vector2(61136.004, 15779)
+position = Vector2(65312, 15757.001)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("5_by12u")
