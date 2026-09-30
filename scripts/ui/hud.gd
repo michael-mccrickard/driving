@@ -251,7 +251,7 @@ func set_music_tracks(tracks: PackedStringArray) -> void:
 		old.queue_free()
 	for track in tracks:
 		var button := Button.new()
-		button.text = track
+		button.text = track.get_file().get_basename()
 		button.focus_mode = Control.FOCUS_NONE
 		button.custom_minimum_size = Vector2(170, 30)
 		button.add_theme_font_size_override("font_size", MUSIC_BUTTON_FONT_SIZE)
@@ -304,8 +304,10 @@ func set_best_fuel_used(fuel: float) -> void:
 	_clear_record_button.disabled = fuel < 0.0
 	if fuel < 0.0:
 		_best_label.text = "Best  --"
+		_level_label.tooltip_text = "Current record: --"
 		return
 	_best_label.text = "Best  %.1f fuel" % fuel
+	_level_label.tooltip_text = "Current record: %s" % _fuel_text(fuel)
 
 
 ## Shows what a run that has just crossed the line did: what it spent, how that
@@ -421,7 +423,7 @@ func _paint_music_toggle() -> void:
 
 func _paint_music_track_buttons() -> void:
 	for button: Button in _music_track_buttons:
-		var colour := COLOUR_LEVEL_CURRENT if button.text == _current_music_track else COLOUR_LEVEL
+		var colour := COLOUR_LEVEL_CURRENT if button.text == _current_music_track.get_file().get_basename() else COLOUR_LEVEL
 		for role: String in [
 			"font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color",
 		]:
