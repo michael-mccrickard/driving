@@ -1,39 +1,31 @@
 class_name MusicPlayer
 extends AudioStreamPlayer
-## Plays one looping track for the length of a run.
+## Plays the current level music, or the waiting music after the finish.
 ##
-## The track is named by the HUD's Music field rather than assigned in the
-## editor, so it can be swapped without touching the scene. Music runs from the
-## start of a run until the car crosses the finish line -- the silence is part of
-## reading the score.
-##
-## Nothing here is allowed to be fatal: a missing or unreadable file leaves the
-## game silent and says so once, because a typo in a text field should not stop
-## anyone driving.
+## Both belong to the same background-music layer, so switching from a level track
+## to waiting.mp3 never competes with the event sounds or the natural sounds.
 
-## Bare filenames are looked up here, so the field can stay short. A path with a
-## scheme or a leading slash is taken as given.
 const TRACK_DIR := "res://assets/audio/"
+const WAITING_TRACK := "misc/waiting.mp3"
 
 var track := ""
 var enabled := true
-
 var _running := false
-# Paths already complained about, so a bad name does not fill the log with one
-# warning per restart.
+var _waiting := false
 var _warned := {}
 
 
-## The file to play, as typed. Takes effect immediately if a run is under way.
+## The level track to play. Takes effect immediately if a run is under way.
 func set_track(new_track: String) -> void:
 	var trimmed := new_track.strip_edges()
-	if trimmed == track:
+	if trimmed == track and not _waiting:
 		if _running and enabled:
 			stop()
 			stream = null
 			_refresh()
 		return
 	track = trimmed
+	_waiting = false
 	stream = null
 	_refresh()
 
@@ -45,17 +37,31 @@ func set_enabled(on: bool) -> void:
 	_refresh()
 
 
-## Starts the track from the top. Every run gets the same opening bar, which is
-## also the cue that the last one is over.
+## Starts the level track from the beginning for a new run.
 func begin_run() -> void:
 	_running = true
+	_waiting = false
 	if playing:
 		stop()
+	stream = null
 	_refresh()
 
 
+## Switches the same music player to the looping waiting track. Event sounds can
+## play independently over it, including the new-record applause.
+func begin_waiting() -> void:
+	_running = true
+	_waiting = true
+	if playing:
+		stop()
+	stream = null
+	_refresh()
+
+
+## Stops the background-music layer completely.
 func end_run() -> void:
 	_running = false
+	_waiting = false
 	_refresh()
 
 
@@ -67,20 +73,17 @@ func _refresh() -> void:
 	if playing:
 		return
 	if stream == null:
-		stream = _load_track()
+		stream = _load_track(WAITING_TRACK if _waiting else track)
 	if stream == null:
 		return
 	play()
 
 
-func _load_track() -> AudioStream:
-	if track.is_empty():
+func _load_track(track_name: String) -> AudioStream:
+	if track_name.is_empty():
 		return null
-	var path := track if track.contains("://") or track.begins_with("/") else TRACK_DIR + track
+	var path := track_name if track_name.contains("://") or track_name.begins_with("/") else TRACK_DIR + track_name
 
-	# An asset the editor has imported comes back through the resource cache with
-	# its import settings applied; anything else is decoded straight off disk, so
-	# a file dropped in while the game is running still plays.
 	var stream_in: AudioStream = null
 	if ResourceLoader.exists(path):
 		stream_in = load(path) as AudioStream
@@ -92,8 +95,6 @@ func _load_track() -> AudioStream:
 			_warned[path] = true
 			push_warning("No music track at %s; playing silent." % path)
 		return null
-	# The mp3 importer defaults to loop = false, and a run has no fixed length,
-	# so the loop is set here rather than left to whoever added the file.
 	if "loop" in stream_in:
 		stream_in.set("loop", true)
 	return stream_in
