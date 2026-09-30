@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c4ctyl3rwg8mr"]
 
 [ext_resource type="Script" uid="uid://crnqxpnd7wnyu" path="res://scripts/ui/hud.gd" id="1_hud"]
-[ext_resource type="Texture2D" uid="uid://bvuqm5kq26pyy" path="res://assets/UI/fuel_used.png" id="2_oj5la"]
+[ext_resource type="Texture2D" uid="uid://bvuqm5kq26py" path="res://assets/UI/fuel_used.png" id="2_oj5la"]
 [ext_resource type="Texture2D" uid="uid://c3ffscsju02hn" path="res://assets/UI/level_name.png" id="3_gss2c"]
 [ext_resource type="Texture2D" uid="uid://clvx6l8qtrllg" path="res://assets/UI/next.png" id="4_h022r"]
 [ext_resource type="Texture2D" uid="uid://cw2yn6ojxdmvr" path="res://assets/UI/radio.png" id="5_4jqwt"]
@@ -29,7 +29,7 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4d46k"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
+bg_color = Color(0.6, 0.6, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mj13f"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -274,6 +274,7 @@ offset_left = 100.0
 offset_top = 22.0
 offset_right = 244.0
 offset_bottom = 90.0
+mouse_filter = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
 text = "Level"
