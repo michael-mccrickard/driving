@@ -12,4 +12,4 @@ track = ExtResource("3_rabxo")
 car = ExtResource("1_rabxo")
 burn_rate = 0.004
 max_speed_kmh = 80.0
-music = "Hobo.mp3"
+music = "track6.mp3"
