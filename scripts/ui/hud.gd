@@ -324,11 +324,15 @@ func show_run_result(
 ) -> void:
 	_fuel_line.text = "Fuel Consumed: %s" % _fuel_text(fuel_used)
 	if is_best and best < 0.0:
-		_record_line.text = "New record: %s.  The first one on this level." % _fuel_text(fuel_used)
+		_record_line.text = "First completed run on this level."
 	elif is_best:
 		_record_line.text = "New record: %s.  The old record was: %s" % [
 			_fuel_text(fuel_used), _fuel_text(best)
 		]
+	elif _fuel_text(fuel_used) == _fuel_text(best):
+		# Compared as the bills are shown rather than as floats, so a run a hair
+		# over the record reads as the tie it looks like, not "0.0 g above".
+		_record_line.text = "You tied the current record: %s" % _fuel_text(best)
 	else:
 		_record_line.text = "You were %s above the record." % _fuel_text(fuel_used - best)
 	_record_line.add_theme_color_override(

@@ -158,6 +158,21 @@ const COLLINEAR_TOLERANCE := 0.05
 	set(value):
 		wall_colour = value
 		queue_redraw()
+## Where the level's art for the finish line and the wall is pinned to the
+## track. A Sprite2D named "Finish" or "Wall" next to this node (a sibling, under
+## the level root) is moved on every build so that this texel of its texture
+## lands on the ground: the foot of the flagpole on the finish line, the bottom
+## of the wall's near face on the near face of the wall. Their scale is left as
+## the level set it, so the art can be sized by hand and still end up in place
+## however the track in front of it is reshaped.
+@export var finish_sprite_foot := Vector2(370.0, 992.0):
+	set(value):
+		finish_sprite_foot = value
+		_request_rebuild()
+@export var wall_sprite_foot := Vector2(517.0, 905.0):
+	set(value):
+		wall_sprite_foot = value
+		_request_rebuild()
 
 var _surface: PackedVector2Array = PackedVector2Array()
 # The gaps this build is cutting: `gaps`, plus whatever else the subclass has to
@@ -311,6 +326,7 @@ func generate() -> void:
 		_build_extra_piece(pieces[i])
 	_build_end_wall()
 	_build_finish_marker()
+	_place_end_sprites()
 	_build_gap_labels()
 	# The wall's paint is this node's own rather than a child's, so a rebuild has
 	# to ask for the repaint that puts it back.
@@ -482,6 +498,37 @@ func _build_finish_marker() -> void:
 	post.begin_cap_mode = Line2D.LINE_CAP_ROUND
 	post.end_cap_mode = Line2D.LINE_CAP_ROUND
 	_add_extra_piece(post)
+
+
+## Stands the level's Finish and Wall art where the finish post and the wall
+## were just built. Either may be missing; a level without them keeps the plain
+## post and grey wall, which the art is otherwise drawn over.
+func _place_end_sprites() -> void:
+	var level := get_parent()
+	if level == null or _surface.size() < 2:
+		return
+	_pin_sprite(
+		level.get_node_or_null("Finish") as Sprite2D, _surface[_finish_index()], finish_sprite_foot
+	)
+	if wall_height > 0.0:
+		var last := _surface[_surface.size() - 1]
+		_pin_sprite(
+			level.get_node_or_null("Wall") as Sprite2D,
+			Vector2(last.x - wall_thickness, last.y),
+			wall_sprite_foot
+		)
+
+
+## Moves `sprite` so the given texel of its texture sits on `local_point` of the
+## track. Through both transforms, so neither the sprite's scale nor where the
+## terrain sits in the level throws it off.
+func _pin_sprite(sprite: Sprite2D, local_point: Vector2, texel: Vector2) -> void:
+	if sprite == null or sprite.texture == null:
+		return
+	var in_sprite := texel + sprite.offset
+	if sprite.centered:
+		in_sprite -= sprite.texture.get_size() * 0.5
+	sprite.global_position = to_global(local_point) - sprite.global_transform.basis_xform(in_sprite)
 
 
 func _add_extra_piece(node: Node) -> void:
