@@ -127,6 +127,7 @@ corner_blend = 360.0
 gaps = PackedVector2Array(1000, 100, 2000, 110, 4000, 120, 6100, 500, 9300, 500, 13700, 700, 16300, 600, 22300, 700, 30000, 800, 39800, 1000, 51500, 1500, 65000, 1500, 81000, 500, 95000, 1200, 107600, 350)
 gap_ramp_height = 0.0
 gap_ramp_length = 48.0
+gap_indicator_fade_out_distance = 500.0
 fill_colour = Color(0.14375854, 0.3393251, 0.38300171, 1)
 surface_colour = Color(0.7319699, 0.6198327, 0.30370858, 1)
 
@@ -149,11 +150,11 @@ end_cap_mode = 2
 curve = SubResource("Curve2D_edits")
 
 [node name="Finish" type="Sprite2D" parent="." unique_id=2020954178]
-position = Vector2(61464, 16231)
+position = Vector2(111047.4, 54803.688)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("4_c2d7m")
 
 [node name="Wall" type="Sprite2D" parent="." unique_id=378623486]
-position = Vector2(61904, 16238)
+position = Vector2(111489.85, 54802.164)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("5_7uwsg")

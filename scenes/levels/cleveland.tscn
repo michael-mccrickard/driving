@@ -97,7 +97,7 @@ corner_blend = 360.0
 gaps = PackedVector2Array()
 gap_ramp_height = 0.0
 gap_ramp_length = 48.0
-gap_indicator_fade_out_distance = 1000.0
+gap_indicator_fade_out_distance = 400.0
 fill_colour = Color(0.46, 0.20884003, 0.07360002, 1)
 surface_colour = Color(0.6622, 0.70505667, 0.86, 1)
 
