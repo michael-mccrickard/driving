@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://7o70xbqqj0fc" path="res://assets/sprites/EightJumps.png" id="4_3vyd6"]
 [ext_resource type="Texture2D" uid="uid://dh2bh3ia864rs" path="res://assets/sprites/finish.png" id="4_fi4js"]
 [ext_resource type="Texture2D" uid="uid://dlby7pnjf7rht" path="res://assets/sprites/wall.png" id="5_3vyd6"]
-[ext_resource type="Texture2D" uid="uid://bcwebjj7743ws" path="res://assets/sprites/small_jump.png" id="5_hx156"]
 
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 
@@ -26,46 +25,6 @@ script = ExtResource("3_fi4js")
 position = Vector2(245, -115)
 scale = Vector2(0.55419356, 0.66818184)
 texture = ExtResource("4_3vyd6")
-
-[node name="SmallJump" type="Sprite2D" parent="." unique_id=334125730]
-position = Vector2(2653.5, 575.13)
-scale = Vector2(0.66, 0.66)
-texture = ExtResource("5_hx156")
-
-[node name="SmallJump2" type="Sprite2D" parent="." unique_id=1696423002]
-position = Vector2(11072.5, 2970.13)
-scale = Vector2(0.66, 0.66)
-texture = ExtResource("5_hx156")
-
-[node name="SmallJump3" type="Sprite2D" parent="." unique_id=909618866]
-position = Vector2(15559.5, 3975.13)
-scale = Vector2(0.66, 0.66)
-texture = ExtResource("5_hx156")
-
-[node name="SmallJump4" type="Sprite2D" parent="." unique_id=289774214]
-position = Vector2(22151.5, 5847.13)
-scale = Vector2(0.66, 0.66)
-texture = ExtResource("5_hx156")
-
-[node name="SmallJump5" type="Sprite2D" parent="." unique_id=1729854652]
-position = Vector2(27967.5, 7364.13)
-scale = Vector2(0.66, 0.66)
-texture = ExtResource("5_hx156")
-
-[node name="SmallJump6" type="Sprite2D" parent="." unique_id=58379289]
-position = Vector2(31893.5, 8349.13)
-scale = Vector2(0.66, 0.66)
-texture = ExtResource("5_hx156")
-
-[node name="SmallJump7" type="Sprite2D" parent="." unique_id=1739063312]
-position = Vector2(36674.5, 9657.13)
-scale = Vector2(0.66, 0.66)
-texture = ExtResource("5_hx156")
-
-[node name="SmallJump8" type="Sprite2D" parent="." unique_id=279988018]
-position = Vector2(41437.5, 11088.13)
-scale = Vector2(0.66, 0.66)
-texture = ExtResource("5_hx156")
 
 [node name="Terrain" type="StaticBody2D" parent="." unique_id=318168794]
 collision_mask = 0
@@ -119,11 +78,11 @@ end_cap_mode = 2
 curve = SubResource("Curve2D_edits")
 
 [node name="Finish" type="Sprite2D" parent="." unique_id=2020954178]
-position = Vector2(61464, 16231)
+position = Vector2(61463.4, 16231.953)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("4_fi4js")
 
 [node name="Wall" type="Sprite2D" parent="." unique_id=378623486]
-position = Vector2(61904, 16238)
+position = Vector2(61905.85, 16241.253)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("5_3vyd6")

@@ -16,6 +16,11 @@ point_count = 1
 
 [node name="Upward" type="Node2D" unique_id=25114719]
 
+[node name="Enjoy" type="Sprite2D" parent="." unique_id=103323318]
+position = Vector2(154, -74)
+scale = Vector2(0.35, 0.422)
+texture = ExtResource("4_dyptq")
+
 [node name="Backdrop" type="CanvasLayer" parent="." unique_id=837521026]
 layer = -100
 script = ExtResource("1_w3qwo")
@@ -24,11 +29,6 @@ scenery_config = ExtResource("2_w3qwo")
 
 [node name="Painter" type="Node2D" parent="Backdrop" unique_id=2054979036]
 script = ExtResource("3_l2hf1")
-
-[node name="Enjoy" type="Sprite2D" parent="." unique_id=103323318]
-position = Vector2(245, -115)
-scale = Vector2(0.55419356, 0.66818184)
-texture = ExtResource("4_dyptq")
 
 [node name="Terrain" type="StaticBody2D" parent="." unique_id=318168794]
 collision_mask = 0
@@ -119,11 +119,11 @@ end_cap_mode = 2
 curve = SubResource("Curve2D_edits")
 
 [node name="Finish" type="Sprite2D" parent="." unique_id=2020954178]
-position = Vector2(61464, 16231)
+position = Vector2(62759.4, 24215.135)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("6_0t3oy")
 
 [node name="Wall" type="Sprite2D" parent="." unique_id=378623486]
-position = Vector2(61904, 16238)
+position = Vector2(63201.85, 24224.436)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("7_n3cdu")
