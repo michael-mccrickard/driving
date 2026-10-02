@@ -244,7 +244,7 @@ const GAP_LABEL_FONT_SIZE := 48
 const GAP_LABEL_SCREEN_Y_FRACTION := 0.333
 const GAP_LABEL_WIDTH := 120.0
 const GAP_INDICATOR_SCREEN_Y_FRACTION := 0.20
-const GAP_INDICATOR_FADE_DISTANCE := 1500.0
+const GAP_INDICATOR_FADE_DISTANCE := 4500.0
 
 
 # --- What a subclass supplies -------------------------------------------------
@@ -800,11 +800,13 @@ func _update_gap_indicators() -> void:
 	var screen_y := viewport_size.y * GAP_INDICATOR_SCREEN_Y_FRACTION
 	var canvas_transform := get_viewport().get_canvas_transform()
 	var car_x := target.global_position.x
+	# The indicators ride above the car rather than over their gaps, so the
+	# warning is in front of the player the whole way in and out.
+	var car_screen_x := (canvas_transform * target.global_position).x
 
+	var showing: Array[GapIndicator] = []
 	for i in mini(_gap_indicators.size(), _gaps_in_effect.size()):
 		var gap := _gaps_in_effect[i]
-		var gap_center := to_global(Vector2(gap.x + gap.y * 0.5, 0.0))
-		var screen_position := canvas_transform * gap_center
 		# Measured to the nearer lip, so the indicator is at full strength for the
 		# whole time the car is over the gap and only fades once it is past it.
 		var near_lip := to_global(Vector2(gap.x, 0.0)).x
@@ -815,7 +817,15 @@ func _update_gap_indicators() -> void:
 
 		var indicator := _gap_indicators[i]
 		indicator.set_indicator(i + 1, opacity)
-		indicator.position = Vector2(
-			screen_position.x - GapIndicator.DIAMETER * 0.5,
+		if opacity > 0.0:
+			showing.append(indicator)
+
+	# Gaps closer together than the fade distance light up at the same time; set
+	# them side by side, in track order, centred over the car instead of on top
+	# of each other.
+	var row_width := GapIndicator.DIAMETER * showing.size()
+	for k in showing.size():
+		showing[k].position = Vector2(
+			car_screen_x - row_width * 0.5 + GapIndicator.DIAMETER * k,
 			screen_y - GapIndicator.DIAMETER * 0.5
 		)
