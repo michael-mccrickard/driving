@@ -698,9 +698,10 @@ func set_author_mode(authoring: bool) -> void:
 	_build_gap_labels()
 
 
-## Supplies the car used to measure distance for the play-mode gap
-## indicators. The runtime scene keeps the car beside the level, so
-## the indicator code also has a fallback lookup for robustness.
+## Supplies the body the play-mode gap indicators measure their distance from.
+## This has to be something that moves with the car -- its chassis -- not the
+## Car node itself, which stays where it was spawned while its bodies drive off.
+## Without one the indicators fall back to looking the chassis up.
 func set_gap_indicator_target(target: Node2D) -> void:
 	_gap_indicator_target = target
 	_update_gap_indicators()
@@ -729,7 +730,8 @@ func _build_gap_labels() -> void:
 			_gap_label_layer.add_child(label)
 			_gap_labels.append(label)
 		_update_gap_labels()
-	else:
+	elif not Engine.is_editor_hint():
+		# There is no car to measure from in the editor.
 		_build_gap_indicators()
 
 
@@ -788,8 +790,10 @@ func _update_gap_indicators() -> void:
 
 	var target := _gap_indicator_target
 	if not is_instance_valid(target):
-		target = get_tree().current_scene.get_node_or_null("Car") as Node2D
-	if target == null:
+		var scene := get_tree().current_scene
+		if scene != null:
+			target = scene.get_node_or_null("Car/Chassis") as Node2D
+	if not is_instance_valid(target):
 		return
 
 	var viewport_size := get_viewport_rect().size
@@ -801,7 +805,11 @@ func _update_gap_indicators() -> void:
 		var gap := _gaps_in_effect[i]
 		var gap_center := to_global(Vector2(gap.x + gap.y * 0.5, 0.0))
 		var screen_position := canvas_transform * gap_center
-		var distance := absf(gap_center.x - car_x)
+		# Measured to the nearer lip, so the indicator is at full strength for the
+		# whole time the car is over the gap and only fades once it is past it.
+		var near_lip := to_global(Vector2(gap.x, 0.0)).x
+		var far_lip := to_global(Vector2(gap.x + gap.y, 0.0)).x
+		var distance := maxf(maxf(near_lip - car_x, car_x - far_lip), 0.0)
 		var progress := 1.0 - clampf(distance / GAP_INDICATOR_FADE_DISTANCE, 0.0, 1.0)
 		var opacity := smoothstep(0.0, 1.0, progress)
 

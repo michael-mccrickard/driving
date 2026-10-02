@@ -170,6 +170,8 @@ func load_level(index: int) -> void:
 	_car.reset_to(_spawn_point)
 	_camera.target = _car.chassis
 	_camera.reset_smoothing()
+	# The car's own node stays where it was spawned; the chassis is what drives.
+	_terrain.set_gap_indicator_target(_car.chassis)
 
 	_hud.set_current_level(_level_index)
 	_terrain.set_author_mode(_hud.is_author_mode())
