@@ -106,6 +106,13 @@ const COLLINEAR_TOLERANCE := 0.05
 	set(value):
 		gap_ramp_length = value
 		_request_rebuild()
+## How far ahead of a gap its play-mode indicator starts to fade in, in pixels
+## before the near lip. It is at full strength from the lip until the car is
+## over the far one.
+@export_range(0.0, 20000.0, 50.0) var gap_indicator_appear_distance := 4500.0
+## How far past a gap its indicator takes to fade back out, in pixels after the
+## far lip.
+@export_range(0.0, 20000.0, 50.0) var gap_indicator_fade_out_distance := 4500.0
 ## How far either side of an anchor on the Edits path its edit reaches, for
 ## anchors whose handles are left where they were dropped. Dragging a point's in
 ## or out handle sets that side's reach instead, so an edit can ease in over a
@@ -244,7 +251,6 @@ const GAP_LABEL_FONT_SIZE := 48
 const GAP_LABEL_SCREEN_Y_FRACTION := 0.333
 const GAP_LABEL_WIDTH := 120.0
 const GAP_INDICATOR_SCREEN_Y_FRACTION := 0.20
-const GAP_INDICATOR_FADE_DISTANCE := 4500.0
 
 
 # --- What a subclass supplies -------------------------------------------------
@@ -784,6 +790,14 @@ func _update_gap_labels() -> void:
 		label.position = Vector2(screen_position.x - GAP_LABEL_WIDTH * 0.5, screen_y)
 
 
+## Opacity of an indicator `distance` pixels from its gap, easing from nothing at
+## `reach` to full at the lip. A reach of 0 leaves that side with no fade at all.
+func _gap_indicator_fade(distance: float, reach: float) -> float:
+	if reach <= 0.0:
+		return 0.0
+	return smoothstep(0.0, 1.0, 1.0 - clampf(distance / reach, 0.0, 1.0))
+
+
 func _update_gap_indicators() -> void:
 	if _gap_indicators.is_empty():
 		return
@@ -811,16 +825,18 @@ func _update_gap_indicators() -> void:
 		# whole time the car is over the gap and only fades once it is past it.
 		var near_lip := to_global(Vector2(gap.x, 0.0)).x
 		var far_lip := to_global(Vector2(gap.x + gap.y, 0.0)).x
-		var distance := maxf(maxf(near_lip - car_x, car_x - far_lip), 0.0)
-		var progress := 1.0 - clampf(distance / GAP_INDICATOR_FADE_DISTANCE, 0.0, 1.0)
-		var opacity := smoothstep(0.0, 1.0, progress)
+		var opacity := 1.0
+		if car_x < near_lip:
+			opacity = _gap_indicator_fade(near_lip - car_x, gap_indicator_appear_distance)
+		elif car_x > far_lip:
+			opacity = _gap_indicator_fade(car_x - far_lip, gap_indicator_fade_out_distance)
 
 		var indicator := _gap_indicators[i]
 		indicator.set_indicator(i + 1, opacity)
 		if opacity > 0.0:
 			showing.append(indicator)
 
-	# Gaps closer together than the fade distance light up at the same time; set
+	# Gaps closer together than the fade distances light up at the same time; set
 	# them side by side, in track order, centred over the car instead of on top
 	# of each other.
 	var row_width := GapIndicator.DIAMETER * showing.size()
