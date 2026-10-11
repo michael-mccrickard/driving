@@ -11,8 +11,7 @@
 [sub_resource type="Curve2D" id="Curve2D_edits"]
 
 [node name="Cleveland" type="Node2D" unique_id=25114719]
-metadata/_edit_vertical_guides_ = [-7078.0, 37975.0, 61133.0]
-metadata/_edit_horizontal_guides_ = [1467.0, 15886.0]
+metadata/_edit_vertical_guides_ = [4.0]
 
 [node name="Backdrop" type="CanvasLayer" parent="." unique_id=837521026]
 layer = -100
@@ -48,7 +47,7 @@ down 4000 24
 flat 500
 up 600 24    
 #gap 1                                  
-gap 1200
+gap 900
 flat 1000
 up 500
 flat 500
@@ -58,7 +57,7 @@ down 4000 30
 flat 500
 up 500 24
 #gap 2
-gap 1500
+gap 1200
 flat 2000
 #down hill 4
 down 4000 30
@@ -122,11 +121,11 @@ end_cap_mode = 2
 curve = SubResource("Curve2D_edits")
 
 [node name="Finish" type="Sprite2D" parent="." unique_id=2020954178]
-position = Vector2(64871.4, 15745.466)
+position = Vector2(64247.4, 15745.466)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("4_hd12p")
 
 [node name="Wall" type="Sprite2D" parent="." unique_id=378623486]
-position = Vector2(65313.85, 15754.766)
+position = Vector2(64689.85, 15754.766)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("5_by12u")

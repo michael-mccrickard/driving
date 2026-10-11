@@ -113,6 +113,9 @@ const COLLINEAR_TOLERANCE := 0.05
 ## How far past a gap its indicator takes to fade back out, in pixels after the
 ## far lip.
 @export_range(0.0, 20000.0, 50.0) var gap_indicator_fade_out_distance := 4500.0
+## How far ahead of the car its gap indicators ride, in pixels along the track.
+## At 0 they sit directly over the car.
+@export_range(0.0, 2000.0, 10.0) var gap_indicator_lead := 300.0
 ## How far either side of an anchor on the Edits path its edit reaches, for
 ## anchors whose handles are left where they were dropped. Dragging a point's in
 ## or out handle sets that side's reach instead, so an edit can ease in over a
@@ -815,8 +818,10 @@ func _update_gap_indicators() -> void:
 	var canvas_transform := get_viewport().get_canvas_transform()
 	var car_x := target.global_position.x
 	# The indicators ride above the car rather than over their gaps, so the
-	# warning is in front of the player the whole way in and out.
-	var car_screen_x := (canvas_transform * target.global_position).x
+	# warning is in front of the player the whole way in and out -- a little
+	# ahead of it, by `gap_indicator_lead`, so they sit where the player looks.
+	var lead_position := target.global_position + Vector2(gap_indicator_lead, 0.0)
+	var anchor_screen_x := (canvas_transform * lead_position).x
 
 	var showing: Array[GapIndicator] = []
 	for i in mini(_gap_indicators.size(), _gaps_in_effect.size()):
@@ -837,11 +842,11 @@ func _update_gap_indicators() -> void:
 			showing.append(indicator)
 
 	# Gaps closer together than the fade distances light up at the same time; set
-	# them side by side, in track order, centred over the car instead of on top
-	# of each other.
+	# them side by side, in track order, centred over the lead point instead of
+	# on top of each other.
 	var row_width := GapIndicator.DIAMETER * showing.size()
 	for k in showing.size():
 		showing[k].position = Vector2(
-			car_screen_x - row_width * 0.5 + GapIndicator.DIAMETER * k,
+			anchor_screen_x - row_width * 0.5 + GapIndicator.DIAMETER * k,
 			screen_y - GapIndicator.DIAMETER * 0.5
 		)
